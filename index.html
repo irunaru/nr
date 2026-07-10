@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>여름방학 달력</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Pretendard","Noto Sans KR",sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#87CEFA,#E0F7FF);
+    padding:30px;
+    color:#333;
+}
+
+.container{
+    max-width:1100px;
+    margin:auto;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+    font-size:2.3rem;
+}
+
+.subtitle{
+    text-align:center;
+    margin-bottom:30px;
+    font-size:1.1rem;
+    color:#555;
+}
+
+.month{
+    background:white;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:35px;
+    box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+.month h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#0080ff;
+}
+
+.weekdays,
+.days{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+}
+
+.weekdays div{
+    background:#EAF6FF;
+    padding:12px 0;
+    text-align:center;
+    font-weight:bold;
+    border:1px solid #d6ecff;
+}
+
+.days div{
+    min-height:90px;
+    border:1px solid #eee;
+    padding:8px;
+    position:relative;
+    transition:.2s;
+    background:white;
+}
+
+.days div:hover{
+    background:#F5FBFF;
+}
+
+.empty{
+    background:#fafafa !important;
+}
+
+.date{
+    font-weight:bold;
+}
+
+.vacation{
+    background:#FFF8C9 !important;
+}
+
+.today{
+    background:#ff4d4f !important;
+    color:white;
+    border:4px solid #b30000 !important;
+    transform:scale(1.05);
+    z-index:5;
+    box-shadow:0 0 20px rgba(255,0,0,.45);
+}
+
+.today .badge{
+    position:absolute;
+    right:8px;
+    bottom:8px;
+    background:yellow;
+    color:red;
+    font-size:12px;
+    font-weight:bold;
+    padding:3px 8px;
+    border-radius:20px;
+}
+
+.footer{
+    text-align:center;
+    margin-top:10px;
+    font-size:1.1rem;
+}
+
+@media (max-width:700px){
+
+.days div{
+    min-height:65px;
+    font-size:14px;
+}
+
+h1{
+    font-size:1.8rem;
+}
+
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🏖️ 여름방학 달력</h1>
+<div class="subtitle">
+2026년 7월 22일 ~ 8월 24일
+</div>
+
+<div id="calendar"></div>
+
+<div class="footer">
+☀️ 즐거운 여름방학 보내세요!
+</div>
+
+</div>
+
+<script>
+
+const vacationStart = new Date(2026,6,22);
+const vacationEnd   = new Date(2026,7,24);
+
+// 실제 오늘 날짜 사용
+const today = new Date();
+
+const months = [
+    {month:6,title:"7월"},
+    {month:7,title:"8월"}
+];
+
+const weekdays = ["일","월","화","수","목","금","토"];
+
+const calendar = document.getElementById("calendar");
+
+months.forEach(info=>{
+
+    const monthDiv=document.createElement("div");
+    monthDiv.className="month";
+
+    const title=document.createElement("h2");
+    title.textContent=`2026년 ${info.title}`;
+    monthDiv.appendChild(title);
+
+    const week=document.createElement("div");
+    week.className="weekdays";
+
+    weekdays.forEach(day=>{
+        const d=document.createElement("div");
+        d.textContent=day;
+        week.appendChild(d);
+    });
+
+    monthDiv.appendChild(week);
+
+    const days=document.createElement("div");
+    days.className="days";
+
+    const firstDay=new Date(2026,info.month,1).getDay();
+    const lastDate=new Date(2026,info.month+1,0).getDate();
+
+    for(let i=0;i<firstDay;i++){
+        const empty=document.createElement("div");
+        empty.className="empty";
+        days.appendChild(empty);
+    }
+
+    for(let d=1; d<=lastDate; d++){
+
+        const cell=document.createElement("div");
+
+        const current=new Date(2026,info.month,d);
+
+        const num=document.createElement("div");
+        num.className="date";
+        num.textContent=d;
+        cell.appendChild(num);
+
+        if(current>=vacationStart && current<=vacationEnd){
+            cell.classList.add("vacation");
+        }
+
+        // 오늘 날짜 강조 (월/일 기준)
+        if(
+            current.getMonth()===today.getMonth() &&
+            current.getDate()===today.getDate()
+        ){
+            cell.classList.add("today");
+
+            const badge=document.createElement("div");
+            badge.className="badge";
+            badge.textContent="오늘";
+            cell.appendChild(badge);
+        }
+
+        days.appendChild(cell);
+
+    }
+
+    monthDiv.appendChild(days);
+    calendar.appendChild(monthDiv);
+
+});
+
+</script>
+
+</body>
+</html>
