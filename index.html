@@ -3,9 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>여름방학 달력</title>
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -14,9 +16,8 @@
 }
 
 body{
-    background:linear-gradient(135deg,#87CEFA,#E0F7FF);
+    background:linear-gradient(135deg,#7DD3FC,#E0F7FF);
     padding:30px;
-    color:#333;
 }
 
 .container{
@@ -27,14 +28,14 @@ body{
 h1{
     text-align:center;
     margin-bottom:10px;
-    font-size:2.3rem;
+    font-size:2.4rem;
 }
 
 .subtitle{
     text-align:center;
-    margin-bottom:30px;
-    font-size:1.1rem;
+    margin-bottom:35px;
     color:#555;
+    font-size:1.1rem;
 }
 
 .month{
@@ -42,13 +43,13 @@ h1{
     border-radius:20px;
     padding:25px;
     margin-bottom:35px;
-    box-shadow:0 12px 30px rgba(0,0,0,.15);
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
 }
 
 .month h2{
     text-align:center;
+    color:#0A84FF;
     margin-bottom:20px;
-    color:#0080ff;
 }
 
 .weekdays,
@@ -58,28 +59,28 @@ h1{
 }
 
 .weekdays div{
-    background:#EAF6FF;
-    padding:12px 0;
+    background:#E8F5FF;
     text-align:center;
+    padding:12px;
     font-weight:bold;
-    border:1px solid #d6ecff;
+    border:1px solid #D8ECFF;
 }
 
 .days div{
-    min-height:90px;
-    border:1px solid #eee;
+    min-height:95px;
+    border:1px solid #EEE;
     padding:8px;
     position:relative;
-    transition:.2s;
     background:white;
+    transition:.25s;
 }
 
 .days div:hover{
-    background:#F5FBFF;
+    background:#F6FCFF;
 }
 
 .empty{
-    background:#fafafa !important;
+    background:#FAFAFA !important;
 }
 
 .date{
@@ -90,45 +91,72 @@ h1{
     background:#FFF8C9 !important;
 }
 
+/* 오늘 날짜 */
 .today{
-    background:#ff4d4f !important;
+    background:#7C3AED !important;
     color:white;
-    border:4px solid #b30000 !important;
-    transform:scale(1.05);
-    z-index:5;
-    box-shadow:0 0 20px rgba(255,0,0,.45);
+    border:5px solid #FFD700 !important;
+    border-radius:18px;
+    transform:scale(1.08);
+    z-index:10;
+    animation:pulse 1s infinite;
+}
+
+.today .date{
+    font-size:24px;
+    font-weight:bold;
 }
 
 .today .badge{
     position:absolute;
-    right:8px;
+    left:50%;
     bottom:8px;
-    background:yellow;
-    color:red;
-    font-size:12px;
+    transform:translateX(-50%);
+    background:#FFD700;
+    color:#7C3AED;
     font-weight:bold;
-    padding:3px 8px;
-    border-radius:20px;
+    padding:4px 10px;
+    border-radius:30px;
+    font-size:12px;
+}
+
+@keyframes pulse{
+
+0%{
+box-shadow:0 0 5px gold;
+}
+
+50%{
+box-shadow:
+0 0 15px gold,
+0 0 35px gold,
+0 0 55px #ff0;
+}
+
+100%{
+box-shadow:0 0 5px gold;
+}
+
 }
 
 .footer{
     text-align:center;
-    margin-top:10px;
     font-size:1.1rem;
+    margin-top:10px;
 }
 
-@media (max-width:700px){
+@media(max-width:700px){
 
 .days div{
-    min-height:65px;
-    font-size:14px;
+    min-height:70px;
 }
 
-h1{
-    font-size:1.8rem;
+.today .date{
+    font-size:18px;
 }
 
 }
+
 </style>
 
 </head>
@@ -137,6 +165,7 @@ h1{
 <div class="container">
 
 <h1>🏖️ 여름방학 달력</h1>
+
 <div class="subtitle">
 2026년 7월 22일 ~ 8월 24일
 </div>
@@ -144,94 +173,96 @@ h1{
 <div id="calendar"></div>
 
 <div class="footer">
-☀️ 즐거운 여름방학 보내세요!
+🌴 즐거운 여름방학 보내세요!
 </div>
 
 </div>
 
 <script>
 
-const vacationStart = new Date(2026,6,22);
-const vacationEnd   = new Date(2026,7,24);
+const vacationStart=new Date(2026,6,22);
+const vacationEnd=new Date(2026,7,24);
 
-// 실제 오늘 날짜 사용
-const today = new Date();
+// 실제 오늘 날짜
+const today=new Date();
 
-const months = [
-    {month:6,title:"7월"},
-    {month:7,title:"8월"}
+const months=[
+{month:6,title:"7월"},
+{month:7,title:"8월"}
 ];
 
-const weekdays = ["일","월","화","수","목","금","토"];
+const week=["일","월","화","수","목","금","토"];
 
-const calendar = document.getElementById("calendar");
+const calendar=document.getElementById("calendar");
 
 months.forEach(info=>{
 
-    const monthDiv=document.createElement("div");
-    monthDiv.className="month";
+const section=document.createElement("div");
+section.className="month";
 
-    const title=document.createElement("h2");
-    title.textContent=`2026년 ${info.title}`;
-    monthDiv.appendChild(title);
+const title=document.createElement("h2");
+title.textContent=`2026년 ${info.title}`;
 
-    const week=document.createElement("div");
-    week.className="weekdays";
+section.appendChild(title);
 
-    weekdays.forEach(day=>{
-        const d=document.createElement("div");
-        d.textContent=day;
-        week.appendChild(d);
-    });
+const weekdays=document.createElement("div");
+weekdays.className="weekdays";
 
-    monthDiv.appendChild(week);
+week.forEach(day=>{
+const d=document.createElement("div");
+d.textContent=day;
+weekdays.appendChild(d);
+});
 
-    const days=document.createElement("div");
-    days.className="days";
+section.appendChild(weekdays);
 
-    const firstDay=new Date(2026,info.month,1).getDay();
-    const lastDate=new Date(2026,info.month+1,0).getDate();
+const days=document.createElement("div");
+days.className="days";
 
-    for(let i=0;i<firstDay;i++){
-        const empty=document.createElement("div");
-        empty.className="empty";
-        days.appendChild(empty);
-    }
+const firstDay=new Date(2026,info.month,1).getDay();
+const lastDate=new Date(2026,info.month+1,0).getDate();
 
-    for(let d=1; d<=lastDate; d++){
+for(let i=0;i<firstDay;i++){
+const empty=document.createElement("div");
+empty.className="empty";
+days.appendChild(empty);
+}
 
-        const cell=document.createElement("div");
+for(let d=1;d<=lastDate;d++){
 
-        const current=new Date(2026,info.month,d);
+const cell=document.createElement("div");
 
-        const num=document.createElement("div");
-        num.className="date";
-        num.textContent=d;
-        cell.appendChild(num);
+const current=new Date(2026,info.month,d);
 
-        if(current>=vacationStart && current<=vacationEnd){
-            cell.classList.add("vacation");
-        }
+const num=document.createElement("div");
+num.className="date";
+num.textContent=d;
 
-        // 오늘 날짜 강조 (월/일 기준)
-        if(
-            current.getMonth()===today.getMonth() &&
-            current.getDate()===today.getDate()
-        ){
-            cell.classList.add("today");
+cell.appendChild(num);
 
-            const badge=document.createElement("div");
-            badge.className="badge";
-            badge.textContent="오늘";
-            cell.appendChild(badge);
-        }
+if(current>=vacationStart && current<=vacationEnd){
+cell.classList.add("vacation");
+}
 
-        days.appendChild(cell);
+if(
+current.getMonth()===today.getMonth() &&
+current.getDate()===today.getDate()
+){
+cell.classList.add("today");
 
-    }
+const badge=document.createElement("div");
+badge.className="badge";
+badge.textContent="⭐ 오늘 ⭐";
+cell.appendChild(badge);
+}
 
-    monthDiv.appendChild(days);
-    calendar.appendChild(monthDiv);
+days.appendChild(cell);
+
+}
+
+section.appendChild(days);
+
+calendar.appendChild(section);
 
 });
 
