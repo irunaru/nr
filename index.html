@@ -1,13 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>여름방학 달력</title>
 
 <style>
-
 *{
     margin:0;
     padding:0;
@@ -33,9 +32,69 @@ h1{
 
 .subtitle{
     text-align:center;
-    margin-bottom:35px;
+    margin-bottom:25px;
     color:#555;
     font-size:1.1rem;
+}
+
+/* ===== 진행 정보 ===== */
+
+.top-panel{
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:30px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+.stats{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:15px;
+    margin-bottom:18px;
+}
+
+.counter{
+    font-size:1.2rem;
+    font-weight:bold;
+    color:#0A84FF;
+}
+
+.progress-text{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.progress{
+    width:100%;
+    height:22px;
+    background:#E5E7EB;
+    border-radius:30px;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:linear-gradient(90deg,#34D399,#0EA5E9);
+    transition:.3s;
+}
+
+.reset-btn{
+    padding:10px 18px;
+    border:none;
+    background:#EF4444;
+    color:white;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:15px;
+    font-weight:bold;
+}
+
+.reset-btn:hover{
+    background:#DC2626;
 }
 
 .month{
@@ -88,10 +147,10 @@ h1{
 }
 
 .vacation{
-    background:#FFF8C9 !important;
+    background:#FFF8C9;
+    cursor:pointer;
 }
 
-/* 오늘 날짜 */
 .today{
     background:#7C3AED !important;
     color:white;
@@ -120,23 +179,24 @@ h1{
     font-size:12px;
 }
 
+.checked{
+    background:#D1D5DB !important;
+    opacity:.65;
+}
+
+.checkmark{
+    position:absolute;
+    right:8px;
+    bottom:6px;
+    font-size:22px;
+    color:#16A34A;
+    font-weight:bold;
+}
+
 @keyframes pulse{
-
-0%{
-box-shadow:0 0 5px gold;
-}
-
-50%{
-box-shadow:
-0 0 15px gold,
-0 0 35px gold,
-0 0 55px #ff0;
-}
-
-100%{
-box-shadow:0 0 5px gold;
-}
-
+0%{box-shadow:0 0 5px gold;}
+50%{box-shadow:0 0 15px gold,0 0 35px gold,0 0 55px #ff0;}
+100%{box-shadow:0 0 5px gold;}
 }
 
 .footer{
@@ -155,11 +215,16 @@ box-shadow:0 0 5px gold;
     font-size:18px;
 }
 
+.stats{
+    flex-direction:column;
+    align-items:flex-start;
 }
 
+}
 </style>
 
 </head>
+
 <body>
 
 <div class="container">
@@ -168,6 +233,32 @@ box-shadow:0 0 5px gold;
 
 <div class="subtitle">
 2026년 7월 24일 ~ 8월 19일
+</div>
+
+<div class="top-panel">
+
+<div class="stats">
+
+<div class="counter">
+✅ 체크한 날짜 :
+<span id="checkedCount">0</span>일
+</div>
+
+<button class="reset-btn" id="resetBtn">
+초기화
+</button>
+
+</div>
+
+<div class="progress-text">
+방학 진행률 :
+<span id="progressText">0%</span>
+</div>
+
+<div class="progress">
+<div class="progress-bar" id="progressBar"></div>
+</div>
+
 </div>
 
 <div id="calendar"></div>
@@ -180,89 +271,170 @@ box-shadow:0 0 5px gold;
 
 <script>
 
-const vacationStart=new Date(2026,6,24);
-const vacationEnd=new Date(2026,7,19);
+const vacationStart = new Date(2026,6,24);
+const vacationEnd = new Date(2026,7,19);
 
-// 실제 오늘 날짜
-const today=new Date();
+const today = new Date();
 
-const months=[
-{month:6,title:"7월"},
-{month:7,title:"8월"}
+const months = [
+    {month:6,title:"7월"},
+    {month:7,title:"8월"}
 ];
 
 const week=["일","월","화","수","목","금","토"];
 
 const calendar=document.getElementById("calendar");
 
+const STORAGE_KEY="summerVacation2026";
+
+let checkedDays=JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+const totalVacationDays=
+Math.floor((vacationEnd-vacationStart)/(1000*60*60*24))+1;
+
+function save(){
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(checkedDays));
+}
+
+function updateInfo(){
+
+    const count=Object.keys(checkedDays).length;
+
+    document.getElementById("checkedCount").textContent=count;
+
+    const percent=Math.round(count/totalVacationDays*100);
+
+    document.getElementById("progressText").textContent=
+        percent+"% ("+count+"/"+totalVacationDays+"일)";
+
+    document.getElementById("progressBar").style.width=
+        percent+"%";
+
+}
+
 months.forEach(info=>{
 
-const section=document.createElement("div");
-section.className="month";
+    const section=document.createElement("div");
+    section.className="month";
 
-const title=document.createElement("h2");
-title.textContent=`2026년 ${info.title}`;
+    const title=document.createElement("h2");
+    title.textContent=`2026년 ${info.title}`;
+    section.appendChild(title);
 
-section.appendChild(title);
+    const weekdays=document.createElement("div");
+    weekdays.className="weekdays";
 
-const weekdays=document.createElement("div");
-weekdays.className="weekdays";
+    week.forEach(day=>{
 
-week.forEach(day=>{
-const d=document.createElement("div");
-d.textContent=day;
-weekdays.appendChild(d);
+        const d=document.createElement("div");
+        d.textContent=day;
+        weekdays.appendChild(d);
+
+    });
+
+    section.appendChild(weekdays);
+
+    const days=document.createElement("div");
+    days.className="days";
+
+    const firstDay=new Date(2026,info.month,1).getDay();
+    const lastDate=new Date(2026,info.month+1,0).getDate();
+
+    for(let i=0;i<firstDay;i++){
+
+        const empty=document.createElement("div");
+        empty.className="empty";
+        days.appendChild(empty);
+
+    }
+
+    for(let d=1;d<=lastDate;d++){
+
+        const cell=document.createElement("div");
+
+        const current=new Date(2026,info.month,d);
+
+        const key=current.toISOString().split("T")[0];
+
+        const num=document.createElement("div");
+        num.className="date";
+        num.textContent=d;
+        cell.appendChild(num);
+
+        const isVacation=current>=vacationStart && current<=vacationEnd;
+
+        if(isVacation){
+
+            cell.classList.add("vacation");
+
+            if(checkedDays[key]){
+
+                cell.classList.add("checked");
+
+                const mark=document.createElement("div");
+                mark.className="checkmark";
+                mark.textContent="✔";
+                cell.appendChild(mark);
+
+            }
+
+            cell.addEventListener("click",()=>{
+
+                if(checkedDays[key]){
+
+                    delete checkedDays[key];
+
+                }else{
+
+                    checkedDays[key]=true;
+
+                }
+
+                save();
+                location.reload();
+
+            });
+
+        }
+
+        if(
+            current.getFullYear()===today.getFullYear() &&
+            current.getMonth()===today.getMonth() &&
+            current.getDate()===today.getDate()
+        ){
+
+            cell.classList.add("today");
+
+            const badge=document.createElement("div");
+            badge.className="badge";
+            badge.textContent="⭐ 오늘 ⭐";
+            cell.appendChild(badge);
+
+        }
+
+        days.appendChild(cell);
+
+    }
+
+    section.appendChild(days);
+
+    calendar.appendChild(section);
+
 });
 
-section.appendChild(weekdays);
+updateInfo();
 
-const days=document.createElement("div");
-days.className="days";
+document.getElementById("resetBtn").addEventListener("click",()=>{
 
-const firstDay=new Date(2026,info.month,1).getDay();
-const lastDate=new Date(2026,info.month+1,0).getDate();
+    if(confirm("체크한 기록을 모두 지울까요?")){
 
-for(let i=0;i<firstDay;i++){
-const empty=document.createElement("div");
-empty.className="empty";
-days.appendChild(empty);
-}
+        checkedDays={};
 
-for(let d=1;d<=lastDate;d++){
+        save();
 
-const cell=document.createElement("div");
+        location.reload();
 
-const current=new Date(2026,info.month,d);
-
-const num=document.createElement("div");
-num.className="date";
-num.textContent=d;
-
-cell.appendChild(num);
-
-if(current>=vacationStart && current<=vacationEnd){
-cell.classList.add("vacation");
-}
-
-if(
-current.getMonth()===today.getMonth() &&
-current.getDate()===today.getDate()
-){
-cell.classList.add("today");
-
-const badge=document.createElement("div");
-badge.className="badge";
-badge.textContent="⭐ 오늘 ⭐";
-cell.appendChild(badge);
-}
-
-days.appendChild(cell);
-
-}
-
-section.appendChild(days);
-
-calendar.appendChild(section);
+    }
 
 });
 
