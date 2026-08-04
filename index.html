@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>✨ 강남여짜💅 럭셔리 갓생 챌린지 🌈</title>
+    <title>✨ 마떼루요 오이쉬 강남여짜💅 럭셔리 갓생 챌린지 🌈</title>
     <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         @keyframes rainbowAnimation {
@@ -74,12 +74,12 @@
         }
 
         header h1 {
-            font-size: 2.1rem;
+            font-size: 1.6rem;
             font-weight: 900;
             margin-bottom: 10px;
             text-shadow: 0 3px 6px rgba(0,0,0,0.25);
             letter-spacing: -0.5px;
-            line-height: 1.3;
+            line-height: 1.4;
         }
 
         header p {
@@ -142,7 +142,7 @@
         .date-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
+            gap: 8px;
         }
 
         .day-label {
@@ -156,61 +156,72 @@
         .day-cell {
             aspect-ratio: 1;
             background: #ffffff;
-            border: 2.5px solid #ffb3d9;
-            border-radius: 18px;
+            border: 2px solid #ffb3d9;
+            border-radius: 14px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: space-between;
             cursor: pointer;
             transition: all 0.25s ease;
             position: relative;
             user-select: none;
+            overflow: hidden;
+            padding: 4px;
         }
 
         .day-cell:hover {
             border-color: var(--hot-pink);
             background-color: #fff0f5;
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(255, 0, 127, 0.35);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 15px rgba(255, 0, 127, 0.35);
         }
 
         .day-cell.completed {
             background: #e6ffed;
             border-color: #00cc66;
-            box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 204, 102, 0.3);
         }
 
         .day-cell.completed .date-num {
             color: #00994d;
+            background: rgba(255, 255, 255, 0.85);
         }
 
         .day-cell.today {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffccff 50%, #e6f2ff 100%);
-            border: 3.5px solid #ff007f;
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+            border: 3px solid #ff007f;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.6);
             animation: rainbow-bounce 1.5s infinite alternate;
         }
 
         @keyframes rainbow-bounce {
             0% { transform: scale(1); }
-            100% { transform: scale(1.08); }
+            100% { transform: scale(1.06); }
         }
 
         .day-cell.today .date-num {
             color: #cc0066;
             font-weight: 900;
+            background: rgba(255, 255, 255, 0.9);
         }
 
         .date-num {
-            font-size: 1.1rem;
+            font-size: 0.8rem;
             font-weight: 900;
             color: var(--text-main);
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.75);
+            padding: 1px 5px;
+            border-radius: 6px;
+            width: 100%;
+            text-align: center;
         }
 
         .day-status-icon {
             font-size: 0.9rem;
-            margin-top: 2px;
+            z-index: 2;
+            margin-bottom: auto;
+            margin-top: auto;
         }
 
         .detail-panel {
@@ -297,7 +308,7 @@
             body { padding: 10px; }
             .container { border-radius: 24px; }
             header { padding: 35px 15px; }
-            header h1 { font-size: 1.6rem; }
+            header h1 { font-size: 1.3rem; }
             header p { font-size: 0.85rem; }
         }
     </style>
@@ -306,9 +317,9 @@
 
     <div class="container">
         <header>
-            <div class="level-badge" id="levelBadge">💅 강남여짜 럭셔리 루키</div>
-            <h1>민🩵초에 민🍫초에 민🦷초를 더➕해서 어⭐머 깜@짝1아🥴 눈👁부🌟셔 눈👀부@셔 이건😒뭐 oh 민🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭✨</h1>
-            <p>강남여짜💅들의 우아하고 찬란한 레인보우 갓생 챌린지 (7/24 ~ 8/19)</p>
+            <div class="level-badge" id="levelBadge">💅 마떼루요 오이쉬 루키</div>
+            <h1>마떼루요🔥 오이쉬✨<br>민 🩵초에 민 🍫초에 민 🦷초를 더 ➕해서 어 ⭐머 깜 @짝 1아 🥴 눈 👁 부 🌟셔 눈 👀 부 @셔 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨</h1>
+            <p>마떼루요 & 오이쉬 넘치는 강남여짜💅들의 우아하고 찬란한 레인보우 갓생 챌린지 (7/24 ~ 8/19)</p>
         </header>
 
         <div class="status-bar">
@@ -366,35 +377,35 @@
             currentDateIter.setDate(currentDateIter.getDate() + 1);
         }
 
-        // 럭셔리 말투의 강남여짜💅 취미 미션 리스트 (27가지)
+        // 요청하신 "민초뉴월드" 밈 문구들을 완벽하게 띄어쓰기별로 재조합하여 날마다 들어가는 27가지 미션 리스트
         const dailyHobbyMissions = [
-            { title: "아날로그 필름 카메라로 우아한 스냅 남기기 📸", desc: "- 청담동 거리나 노을 진 테라스의 풍경을 우아하게 담아보기\n- 일상 속 반짝이는 순간을 클래식한 감성으로 박제하기 💅" },
-            { title: "아이패드로 하이엔드 디지털 굿즈 드로잉 🎨", desc: "- 프로크리에이트로 영롱한 감성의 배경화면 디자인하기\n- 강남여짜💅의 탁월한 미적 감각을 세상에 뽐내기" },
-            { title: "홈베이킹으로 시그니처 럭셔리 디저트 굽기 🧁", desc: "- 프리미엄 르뱅 쿠키나 상큼한 요거트 타르트 도전하기\n- 완벽한 플레이팅과 함께 인증 샷으로 영속시키기 ✨" },
-            { title: "프랑스 자수로 우아한 인테리어 소품 완성 🧵", desc: "- 패브릭 파우치나 손수건에 섬세한 플로럴 수놓기\n- 고요하고 우아한 시간 속에서 잡념을 완벽히 소거하기" },
-            { title: "분위기 있는 LP 바 탐방 및 플레이리스트 디깅 🎧", desc: "- 아날로그 사운드가 감싸는 힙한 LP 바 방문하기\n- 나만의 시그니처 여름 드라이브 팝송 리스트 구축하기" },
-            { title: "도자기 공방 원데이 클래스로 하이엔드 빚기 🏺", desc: "- 세상에 단 하나뿐인 우아한 시리얼 컵 직접 성형하기\n- 흙의 촉감을 느끼며 온전히 몰입하는 힐링 타임 🤍" },
-            { title: "트렌디한 에세이 정독 및 감명 깊은 구절 필사 📖", desc: "- 지적인 매력을 더해줄 깊이 있는 문장 우아하게 필사하기\n- 마음에 와닿는 문장을 메모하며 내면의 교양 채우기" },
-            { title: "향수 공방에서 나만의 시그니처 아로마 조조 🌸", desc: "- 취향에 맞는 플로럴과 우디 노트를 우아하게 블렌딩하기\n- 세상에 단 하나뿐인 내면의 향수 네이밍 완성하기" },
-            { title: "홈필라테스로 완벽한 바디 라인업 스트레칭 🧘‍♀️", desc: "- 코어를 단단하게 잡아주는 우아한 전신 스트레칭 30분\n- 폼롤러로 숨겨진 라인까지 부드럽게 정돈하기 💫" },
-            { title: "비즈 공예로 럭셔리한 유니크 액세서리 뚝딱 💍", desc: "- 반짝이는 비즈 반지와 키링으로 손끝 품격 높이기\n- 소중한 지인에게 선물할 강남여짜💅 감성 우정템 제작" },
-            { title: "감성 브이로그 편집 및 릴스 제작으로 셀럽 되기 🎬", desc: "- 찬란했던 일상 클립을 모아 트렌디한 숏폼 편집하기\n- 감각적인 자막과 무드 있는 음악으로 완성도 극대화" },
-            { title: "오일 파스텔로 몽환적인 노을 하늘 그리기 🖍️", desc: "- 부드러운 터치감의 오일 파스텔로 감성적인 풍경 담기\n- 손끝으로 곱게 문질러 찬란한 그라데이션 완성하기" },
-            { title: "턴테이블 선율과 함께하는 우아한 홈 카페 ☕", desc: "- 에스프레소 투 샷 내려 바닐라 라떼 완벽하게 제조하기\n- 창밖의 풍경을 감상하며 여유로운 티타임 만끽하기" },
-            { title: "반려 식물 분갈이 및 미니 테라리움 연출 🌱", desc: "- 싱그러운 초록빛 반려 식물에게 우거진 보금자리 선물\n- 투명한 유리병 속 나만의 작은 프라이빗 정원 꾸미기" },
-            { title: "하이엔드 섀도잉과 팝송 가사 완벽 마스터 🎶", desc: "- 팝스타의 감성을 담아 트렌디한 발음으로 따라 부르기\n- 원어민 섀도잉으로 지성과 매력을 동시에 장착하기" },
-            { title: "오가닉 샐러드 및 그릭 요거트 볼 플레이팅 🥗", desc: "- 투명한 볼에 신선한 토핑을 정갈하게 가득 담아내기\n- 눈과 입이 모두 호강하는 건강한 럭셔리 식단 완성" },
-            { title: "감사 일기로 멘탈 자존감 최고조로 끌어올리기 ✨", desc: "- 오늘 하루 나를 기쁘게 한 사소한 순간 3가지 기록하기\n- 긍정적인 확언을 통해 우아한 멘탈리티 풀충전하기" },
-            { title: "셀프 젤 네일과 패디로 손끝까지 완벽하게 💅", desc: "- 반짝이는 파츠와 트렌디한 컬러로 블링블링 완성하기\n- 큐티클까지 세심하게 케어하며 극대화된 기분 전환" },
-            { title: "영감 가득한 나만의 힙한 콜라주 스크랩북 ✂️", desc: "- 감각적인 매거진과 스티커로 다이어리 페이지 채우기\n- 하나뿐인 예술적인 무드의 콜라주 작품 완성하기" },
-            { title: "우아한 운동복 갖춰 입고 선선한 야간 산책 🏃‍♀️", desc: "- 가벼운 발걸음으로 선선한 밤공기 만끽하며 걷기\n- 좋아하는 음악과 함께 5천 보 채우며 힐링 다지기" },
-            { title: "소이 캔들과 인센스로 방 안의 무드 체인지 🕯️", desc: "- 은은하게 퍼지는 고급스러운 향기로 공간 채우기\n- 조명을 낮추고 아늑하고 품격 있는 휴식 취하기" },
-            { title: "감성 터지는 인디 아트 영화 한 편 감상하기 🎟️", desc: "- OTT를 통해 여운이 깊은 독립 영화 정주행하기\n- 영화 속 주옥같은 대사와 감정을 다이어리에 기록" },
-            { title: "플라워 마켓에서 직접 고른 꽃으로 화병 채우기 💐", desc: "- 싱그러운 생화를 직접 골라 조화롭게 손질하기\n- 화병에 우아하게 꽂아 방 안의 공기마저 화사하게" },
-            { title: "유쾌한 파티 게임으로 일상의 스트레스 타파 🎮", desc: "- 스마트한 두뇌 회전과 위트 있는 게임으로 리프레시\n- 지루할 틈 없는 짜릿한 승부로 엔돌핀 충전하기" },
-            { title: "모던 캘리그라피로 감성적인 손글씨 남기기 ✍️", desc: "- 만년필의 사각거리는 소리와 함께 감성 글씨체 연마\n- 가슴에 새기고 싶은 명언을 예술적으로 적어보기" },
-            { title: "골목길 숨겨진 독립 서점 투어 및 도서 쇼핑 📚", desc: "- 고요하고 아기자기한 감성의 독립 서점 방문하기\n- 개성 넘치는 독립 출판물 속에서 영감 얻기" },
-            { title: "여름방학 총결산 및 다음 시즌 위시리스트 작성 📝", desc: "- 방학 동안 이뤄낸 눈부신 갓생 성과들 우아하게 회고\n- 다가올 미래를 위한 새로운 럭셔리 위시리스트 구상" }
+            { title: "민 🩵초에 민 🍫초에 민 🦷초를", desc: "- 더 ➕해서 어 ⭐머 깜 @짝 1아 🥴\n- 민초 뉴 월드의 서막 열기 ✨" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\n- 찬란하게 빛나는 갓생 완성하기 💎" },
+            { title: "민 🩵초에 민 🍫초에", desc: "- 민 🦷초를 더 ➕해서 어 ⭐머\n- 완벽한 민초 조합 연구하기 🌿" },
+            { title: "깜 @짝 1아 🥴 눈 👁 부 🌟셔", desc: "- 눈 👀 부 @셔 이건 😒뭐 oh\n- 눈부신 비주얼 장착하기 💅" },
+            { title: "민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨", desc: "- 민 🩵초에 민 🦷초를 더 ➕해서\n- 새로운 트렌드 선도하기 🚀" },
+            { title: "어 ⭐머 깜 @짝 1아 🥴", desc: "- 눈 👁 부 🌟셔 눈 👀 부 @셔\n- 깜짝 놀랄 만한 미모 가꾸기 💕" },
+            { title: "이건 😒뭐 oh 민 🍫초", desc: "- 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨ 민 🩵초에\n- 독보적인 아라베스크 무드 뽐내기 🌟" },
+            { title: "민 🍫초에 민 🦷초를 더 ➕해서", desc: "- 어 ⭐머 깜 @짝 1아 🥴\n- 화려한 초콜릿 감성 채우기 🍫" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\n- 반짝이는 일상 만들기 ✨" },
+            { title: "민 🩵초에 민 🍫초에 민 🦷초를", desc: "- 더 ➕해서 어 ⭐머 깜 @짝 1아 🥴\n- 민초단 대통합의 날 🌿" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\n- 시선을 사로잡는 스타일링 💖" },
+            { title: "민 🩵초에 민 🍫초에", desc: "- 민 🦷초를 더 ➕해서 어 ⭐머\n- 향긋한 민트향 가득 채우기 🍃" },
+            { title: "깜 @짝 1아 🥴 눈 👁 부 🌟셔", desc: "- 눈 👀 부 @셔 이건 😒뭐 oh\n- 힙하고 찬란한 무드 발산 👑" },
+            { title: "민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨", desc: "- 민 🩵초에 민 🦷초를 더 ➕해서\n- 새로운 세계로 발돋움하기 ✈️" },
+            { title: "어 ⭐머 깜 @짝 1아 🥴", desc: "- 눈 👁 부 🌟셔 눈 👀 부 @셔\n- 주변을 놀라게 할 갓생 챌린지 🔥" },
+            { title: "이건 😒뭐 oh 민 🍫초", desc: "- 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨ 민 🩵초에\n- 트렌디한 감성 온몸으로 느끼기 🎶" },
+            { title: "민 🍫초에 민 🦷초를 더 ➕해서", desc: "- 어 ⭐머 깜 @짝 1아 🥴\n- 달콤쌉싸름한 힐링 타임 ☕" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\- 눈부신 자태로 홈캉스 즐기기 🛋️" },
+            { title: "민 🩵초에 민 🍫초에 민 🦷초를", desc: "- 더 ➕해서 어 ⭐머 깜 @짝 1아 🥴\n- 완벽한 삼중 민초 플렉스 💸" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\n- 찬란한 여름방학 주인공 되기 🎬" },
+            { title: "민 🩵초에 민 🍫초에", desc: "- 민 🦷초를 더 ➕해서 어 ⭐머\n- 상쾌함과 달콤함의 조화 🧊" },
+            { title: "깜 @짝 1아 🥴 눈 👁 부 🌟셔", desc: "- 눈 👀 부 @셔 이건 😒뭐 oh\n- 짜릿한 반전 매력 뽐내기 ⚡" },
+            { title: "민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨", desc: "- 민 🩵초에 민 🦷초를 더 ➕해서\n- 민초 뉴 월드 그 자체 되기 🌍" },
+            { title: "어 ⭐머 깜 @짝 1아 🥴", desc: "- 눈 👁 부 🌟셔 눈 👀 부 @셔\n- 깜짝 놀랄 집중력 발휘하기 🎯" },
+            { title: "이건 😒뭐 oh 민 🍫초", desc: "- 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨ 민 🩵초에\n- 독보적인 아우라 뿜어내기 ✨" },
+            { title: "민 🍫초에 민 🦷초를 더 ➕해서", desc: "- 어 ⭐머 깜 @짝 1아 🥴\n- 갓생 루틴 완벽하게 클리어 🏆" },
+            { title: "눈 👁 부 🌟셔 눈 👀 부 @셔", desc: "- 이건 😒뭐 oh 민 🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭 ✨\n- 대망의 피날레 찬란한 엔딩 💖" }
         ];
 
         let completedDays = JSON.parse(localStorage.getItem('gangnam_yojja_mincho_days')) || {};
@@ -450,7 +461,7 @@
 
                 cell.innerHTML = `
                     <span class="date-num">${dateNum}</span>
-                    <span class="day-status-icon">${completedDays[dateKey] ? '💎' : ''}</span>
+                    <span class="day-status-icon">${completedDays[dateKey] ? '💎' : '🍃'}</span>
                 `;
 
                 cell.onclick = () => {
@@ -517,7 +528,7 @@
             } else if (percentage >= 20) {
                 levelBadge.innerText = "🌸 프리티 루키";
             } else {
-                levelBadge.innerText = "💅 강남여짜 럭셔리 루키";
+                levelBadge.innerText = "💅 마떼루요 오이쉬 루키";
             }
         }
 
