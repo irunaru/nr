@@ -1,443 +1,537 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>여름방학 달력</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>✨ 강남여짜💅 럭셔리 갓생 챌린지 🌈</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        @keyframes rainbowAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    font-family:"Pretendard","Noto Sans KR",sans-serif;
-}
+        :root {
+            --hot-pink: #ff007f;
+            --neon-pink: #ff66cc;
+            --card-bg: rgba(255, 255, 255, 0.94);
+            --text-main: #1a1a1a;
+            --text-sub: #555555;
+        }
 
-body{
-    background:linear-gradient(135deg,#7DD3FC,#E0F7FF);
-    padding:30px;
-}
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', sans-serif;
+        }
 
-.container{
-    max-width:1100px;
-    margin:auto;
-}
+        body {
+            background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff, #ff007f);
+            background-size: 800% 800%;
+            animation: rainbowAnimation 8s ease infinite;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+        }
 
-h1{
-    text-align:center;
-    margin-bottom:10px;
-    font-size:2.4rem;
-}
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 40px;
+            box-shadow: 0 0 50px rgba(255, 0, 127, 0.6), inset 0 0 20px rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            border: 4px solid #ffffff;
+        }
 
-.subtitle{
-    text-align:center;
-    margin-bottom:25px;
-    color:#555;
-    font-size:1.1rem;
-}
+        header {
+            background: linear-gradient(135deg, #ff007f 0%, #ff66cc 50%, #8b00ff 100%);
+            color: white;
+            padding: 45px 20px;
+            text-align: center;
+            position: relative;
+        }
 
-/* ===== 진행 정보 ===== */
+        .level-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.35);
+            padding: 8px 22px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 900;
+            margin-bottom: 14px;
+            backdrop-filter: blur(10px);
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
 
-.top-panel{
-    background:white;
-    border-radius:20px;
-    padding:20px;
-    margin-bottom:30px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
+        header h1 {
+            font-size: 2.1rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-shadow: 0 3px 6px rgba(0,0,0,0.25);
+            letter-spacing: -0.5px;
+            line-height: 1.3;
+        }
 
-.stats{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    flex-wrap:wrap;
-    gap:15px;
-    margin-bottom:18px;
-}
+        header p {
+            font-size: 0.95rem;
+            font-weight: 700;
+            opacity: 0.95;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.15);
+        }
 
-.counter{
-    font-size:1.2rem;
-    font-weight:bold;
-    color:#0A84FF;
-}
+        .status-bar {
+            padding: 24px 25px;
+            background: #ffffff;
+            border-bottom: 3px solid #ffccff;
+        }
 
-.progress-text{
-    font-weight:bold;
-    margin-bottom:8px;
-}
+        .status-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--hot-pink);
+        }
 
-.progress{
-    width:100%;
-    height:22px;
-    background:#E5E7EB;
-    border-radius:30px;
-    overflow:hidden;
-}
+        .exp-track {
+            width: 100%;
+            height: 16px;
+            background: #ffe6f2;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #ff99cc;
+        }
 
-.progress-bar{
-    width:0%;
-    height:100%;
-    background:linear-gradient(90deg,#34D399,#0EA5E9);
-    transition:.3s;
-}
+        .exp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #8b00ff, #ff007f);
+            background-size: 400% 400%;
+            animation: rainbowAnimation 4s linear infinite;
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 6px;
+        }
 
-.reset-btn{
-    padding:10px 18px;
-    border:none;
-    background:#EF4444;
-    color:white;
-    border-radius:12px;
-    cursor:pointer;
-    font-size:15px;
-    font-weight:bold;
-}
+        .calendar-section {
+            padding: 25px;
+            background: rgba(255, 240, 245, 0.5);
+        }
 
-.reset-btn:hover{
-    background:#DC2626;
-}
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+            color: var(--hot-pink);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
 
-.month{
-    background:white;
-    border-radius:20px;
-    padding:25px;
-    margin-bottom:35px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-}
+        .date-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
 
-.month h2{
-    text-align:center;
-    color:#0A84FF;
-    margin-bottom:20px;
-}
+        .day-label {
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: var(--text-sub);
+            padding-bottom: 6px;
+        }
 
-.weekdays,
-.days{
-    display:grid;
-    grid-template-columns:repeat(7,1fr);
-}
+        .day-cell {
+            aspect-ratio: 1;
+            background: #ffffff;
+            border: 2.5px solid #ffb3d9;
+            border-radius: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            user-select: none;
+        }
 
-.weekdays div{
-    background:#E8F5FF;
-    text-align:center;
-    padding:12px;
-    font-weight:bold;
-    border:1px solid #D8ECFF;
-}
+        .day-cell:hover {
+            border-color: var(--hot-pink);
+            background-color: #fff0f5;
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 0, 127, 0.35);
+        }
 
-.days div{
-    min-height:95px;
-    border:1px solid #EEE;
-    padding:8px;
-    position:relative;
-    background:white;
-    transition:.25s;
-}
+        .day-cell.completed {
+            background: #e6ffed;
+            border-color: #00cc66;
+            box-shadow: 0 4px 15px rgba(0, 204, 102, 0.3);
+        }
 
-.days div:hover{
-    background:#F6FCFF;
-}
+        .day-cell.completed .date-num {
+            color: #00994d;
+        }
 
-.empty{
-    background:#FAFAFA !important;
-}
+        .day-cell.today {
+            background: linear-gradient(135deg, #fff0f5 0%, #ffccff 50%, #e6f2ff 100%);
+            border: 3.5px solid #ff007f;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.6);
+            animation: rainbow-bounce 1.5s infinite alternate;
+        }
 
-.date{
-    font-weight:bold;
-}
+        @keyframes rainbow-bounce {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08); }
+        }
 
-.vacation{
-    background:#FFF8C9;
-    cursor:pointer;
-}
+        .day-cell.today .date-num {
+            color: #cc0066;
+            font-weight: 900;
+        }
 
-.today{
-    background:#7C3AED !important;
-    color:white;
-    border:5px solid #FFD700 !important;
-    border-radius:18px;
-    transform:scale(1.08);
-    z-index:10;
-    animation:pulse 1s infinite;
-}
+        .date-num {
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--text-main);
+        }
 
-.today .date{
-    font-size:24px;
-    font-weight:bold;
-}
+        .day-status-icon {
+            font-size: 0.9rem;
+            margin-top: 2px;
+        }
 
-.today .badge{
-    position:absolute;
-    left:50%;
-    bottom:8px;
-    transform:translateX(-50%);
-    background:#FFD700;
-    color:#7C3AED;
-    font-weight:bold;
-    padding:4px 10px;
-    border-radius:30px;
-    font-size:12px;
-}
+        .detail-panel {
+            background: #ffffff;
+            border-radius: 22px;
+            padding: 24px;
+            margin-top: 25px;
+            border: 3px solid #ff99cc;
+            box-shadow: 0 8px 25px rgba(255, 153, 204, 0.3);
+        }
 
-.checked{
-    background:#D1D5DB !important;
-    opacity:.65;
-}
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
 
-.checkmark{
-    position:absolute;
-    right:8px;
-    bottom:6px;
-    font-size:22px;
-    color:#16A34A;
-    font-weight:bold;
-}
+        .detail-date-title {
+            font-size: 1.15rem;
+            font-weight: 900;
+            color: var(--hot-pink);
+        }
 
-@keyframes pulse{
-0%{box-shadow:0 0 5px gold;}
-50%{box-shadow:0 0 15px gold,0 0 35px gold,0 0 55px #ff0;}
-100%{box-shadow:0 0 5px gold;}
-}
+        .mission-box {
+            background: #fff0f5;
+            padding: 18px;
+            border-radius: 16px;
+            border: 2.5px solid #ffb3d9;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            box-shadow: inset 0 2px 6px rgba(255, 0, 127, 0.05);
+        }
 
-.footer{
-    text-align:center;
-    font-size:1.1rem;
-    margin-top:10px;
-}
+        .mission-box input[type="checkbox"] {
+            margin-top: 4px;
+            width: 24px;
+            height: 24px;
+            accent-color: var(--hot-pink);
+            cursor: pointer;
+        }
 
-@media(max-width:700px){
+        .mission-content label {
+            font-size: 1.05rem;
+            font-weight: 900;
+            color: var(--text-main);
+            cursor: pointer;
+            display: block;
+            margin-bottom: 4px;
+        }
 
-.days div{
-    min-height:70px;
-}
+        .mission-content span {
+            font-size: 0.92rem;
+            color: var(--text-sub);
+            line-height: 1.5;
+            font-weight: 700;
+        }
 
-.today .date{
-    font-size:18px;
-}
+        .footer-actions {
+            text-align: center;
+            margin-top: 20px;
+        }
 
-.stats{
-    flex-direction:column;
-    align-items:flex-start;
-}
+        .reset-btn {
+            background: none;
+            border: none;
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            font-weight: 800;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: all 0.2s;
+        }
 
-}
-</style>
+        .reset-btn:hover {
+            color: #ff0000;
+            background-color: #ffe6e6;
+        }
 
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .container { border-radius: 24px; }
+            header { padding: 35px 15px; }
+            header h1 { font-size: 1.6rem; }
+            header p { font-size: 0.85rem; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div class="container">
+    <div class="container">
+        <header>
+            <div class="level-badge" id="levelBadge">💅 강남여짜 럭셔리 루키</div>
+            <h1>민🩵초에 민🍫초에 민🦷초를 더➕해서 어⭐머 깜@짝1아🥴 눈👁부🌟셔 눈👀부@셔 이건😒뭐 oh 민🍫초 𝓝𝓮𝔀 𝔀𝓸𝓾𝓵𝓭✨</h1>
+            <p>강남여짜💅들의 우아하고 찬란한 레인보우 갓생 챌린지 (7/24 ~ 8/19)</p>
+        </header>
 
-<h1>🏖️ 여름방학 달력</h1>
+        <div class="status-bar">
+            <div class="status-info">
+                <span id="expText">전체 달성도: 0%</span>
+                <span id="scoreText">0 / 27일 완료</span>
+            </div>
+            <div class="exp-track">
+                <div class="exp-fill" id="expFill"></div>
+            </div>
+        </div>
 
-<div class="subtitle">
-2026년 7월 24일 ~ 8월 19일
-</div>
+        <div class="calendar-section">
+            <div class="section-title">
+                <span>✨ 쌈뽕 캘린더</span>
+            </div>
 
-<div class="top-panel">
+            <div class="date-grid" id="dateGrid">
+                <div class="day-label" style="color: #ff0000;">일</div>
+                <div class="day-label">월</div>
+                <div class="day-label">화</div>
+                <div class="day-label">수</div>
+                <div class="day-label">목</div>
+                <div class="day-label">금</div>
+                <div class="day-label" style="color: #0000ff;">토</div>
+            </div>
 
-<div class="stats">
+            <div class="detail-panel" id="detailPanel">
+                <div class="detail-header">
+                    <span class="detail-date-title" id="selectedDateTitle">날짜를 선택해주세요</span>
+                </div>
+                <div id="missionContainer">
+                    <p style="font-size: 0.95rem; color: var(--text-sub); text-align: center; padding: 20px 0; line-height: 1.6;">
+                        캘린더에서 날짜를 클릭하여<br>오늘의 럭셔리한 강남여짜💅 미션을 확인하세요! ✨
+                    </p>
+                </div>
+            </div>
 
-<div class="counter">
-✅ 체크한 날짜 :
-<span id="checkedCount">0</span>일
-</div>
+            <div class="footer-actions">
+                <button class="reset-btn" onclick="resetData()">기록 초기화하기</button>
+            </div>
+        </div>
+    </div>
 
-<button class="reset-btn" id="resetBtn">
-초기화
-</button>
+    <script>
+        const startDate = new Date(2026, 6, 24); // 7월 24일
+        const endDate = new Date(2026, 7, 19);   // 8월 19일
 
-</div>
+        let datesArray = [];
+        let currentDateIter = new Date(startDate);
+        const startDayOfWeek = startDate.getDay(); 
 
-<div class="progress-text">
-방학 진행률 :
-<span id="progressText">0%</span>
-</div>
+        while (currentDateIter <= endDate) {
+            datesArray.push(new Date(currentDateIter));
+            currentDateIter.setDate(currentDateIter.getDate() + 1);
+        }
 
-<div class="progress">
-<div class="progress-bar" id="progressBar"></div>
-</div>
+        // 럭셔리 말투의 강남여짜💅 취미 미션 리스트 (27가지)
+        const dailyHobbyMissions = [
+            { title: "아날로그 필름 카메라로 우아한 스냅 남기기 📸", desc: "- 청담동 거리나 노을 진 테라스의 풍경을 우아하게 담아보기\n- 일상 속 반짝이는 순간을 클래식한 감성으로 박제하기 💅" },
+            { title: "아이패드로 하이엔드 디지털 굿즈 드로잉 🎨", desc: "- 프로크리에이트로 영롱한 감성의 배경화면 디자인하기\n- 강남여짜💅의 탁월한 미적 감각을 세상에 뽐내기" },
+            { title: "홈베이킹으로 시그니처 럭셔리 디저트 굽기 🧁", desc: "- 프리미엄 르뱅 쿠키나 상큼한 요거트 타르트 도전하기\n- 완벽한 플레이팅과 함께 인증 샷으로 영속시키기 ✨" },
+            { title: "프랑스 자수로 우아한 인테리어 소품 완성 🧵", desc: "- 패브릭 파우치나 손수건에 섬세한 플로럴 수놓기\n- 고요하고 우아한 시간 속에서 잡념을 완벽히 소거하기" },
+            { title: "분위기 있는 LP 바 탐방 및 플레이리스트 디깅 🎧", desc: "- 아날로그 사운드가 감싸는 힙한 LP 바 방문하기\n- 나만의 시그니처 여름 드라이브 팝송 리스트 구축하기" },
+            { title: "도자기 공방 원데이 클래스로 하이엔드 빚기 🏺", desc: "- 세상에 단 하나뿐인 우아한 시리얼 컵 직접 성형하기\n- 흙의 촉감을 느끼며 온전히 몰입하는 힐링 타임 🤍" },
+            { title: "트렌디한 에세이 정독 및 감명 깊은 구절 필사 📖", desc: "- 지적인 매력을 더해줄 깊이 있는 문장 우아하게 필사하기\n- 마음에 와닿는 문장을 메모하며 내면의 교양 채우기" },
+            { title: "향수 공방에서 나만의 시그니처 아로마 조조 🌸", desc: "- 취향에 맞는 플로럴과 우디 노트를 우아하게 블렌딩하기\n- 세상에 단 하나뿐인 내면의 향수 네이밍 완성하기" },
+            { title: "홈필라테스로 완벽한 바디 라인업 스트레칭 🧘‍♀️", desc: "- 코어를 단단하게 잡아주는 우아한 전신 스트레칭 30분\n- 폼롤러로 숨겨진 라인까지 부드럽게 정돈하기 💫" },
+            { title: "비즈 공예로 럭셔리한 유니크 액세서리 뚝딱 💍", desc: "- 반짝이는 비즈 반지와 키링으로 손끝 품격 높이기\n- 소중한 지인에게 선물할 강남여짜💅 감성 우정템 제작" },
+            { title: "감성 브이로그 편집 및 릴스 제작으로 셀럽 되기 🎬", desc: "- 찬란했던 일상 클립을 모아 트렌디한 숏폼 편집하기\n- 감각적인 자막과 무드 있는 음악으로 완성도 극대화" },
+            { title: "오일 파스텔로 몽환적인 노을 하늘 그리기 🖍️", desc: "- 부드러운 터치감의 오일 파스텔로 감성적인 풍경 담기\n- 손끝으로 곱게 문질러 찬란한 그라데이션 완성하기" },
+            { title: "턴테이블 선율과 함께하는 우아한 홈 카페 ☕", desc: "- 에스프레소 투 샷 내려 바닐라 라떼 완벽하게 제조하기\n- 창밖의 풍경을 감상하며 여유로운 티타임 만끽하기" },
+            { title: "반려 식물 분갈이 및 미니 테라리움 연출 🌱", desc: "- 싱그러운 초록빛 반려 식물에게 우거진 보금자리 선물\n- 투명한 유리병 속 나만의 작은 프라이빗 정원 꾸미기" },
+            { title: "하이엔드 섀도잉과 팝송 가사 완벽 마스터 🎶", desc: "- 팝스타의 감성을 담아 트렌디한 발음으로 따라 부르기\n- 원어민 섀도잉으로 지성과 매력을 동시에 장착하기" },
+            { title: "오가닉 샐러드 및 그릭 요거트 볼 플레이팅 🥗", desc: "- 투명한 볼에 신선한 토핑을 정갈하게 가득 담아내기\n- 눈과 입이 모두 호강하는 건강한 럭셔리 식단 완성" },
+            { title: "감사 일기로 멘탈 자존감 최고조로 끌어올리기 ✨", desc: "- 오늘 하루 나를 기쁘게 한 사소한 순간 3가지 기록하기\n- 긍정적인 확언을 통해 우아한 멘탈리티 풀충전하기" },
+            { title: "셀프 젤 네일과 패디로 손끝까지 완벽하게 💅", desc: "- 반짝이는 파츠와 트렌디한 컬러로 블링블링 완성하기\n- 큐티클까지 세심하게 케어하며 극대화된 기분 전환" },
+            { title: "영감 가득한 나만의 힙한 콜라주 스크랩북 ✂️", desc: "- 감각적인 매거진과 스티커로 다이어리 페이지 채우기\n- 하나뿐인 예술적인 무드의 콜라주 작품 완성하기" },
+            { title: "우아한 운동복 갖춰 입고 선선한 야간 산책 🏃‍♀️", desc: "- 가벼운 발걸음으로 선선한 밤공기 만끽하며 걷기\n- 좋아하는 음악과 함께 5천 보 채우며 힐링 다지기" },
+            { title: "소이 캔들과 인센스로 방 안의 무드 체인지 🕯️", desc: "- 은은하게 퍼지는 고급스러운 향기로 공간 채우기\n- 조명을 낮추고 아늑하고 품격 있는 휴식 취하기" },
+            { title: "감성 터지는 인디 아트 영화 한 편 감상하기 🎟️", desc: "- OTT를 통해 여운이 깊은 독립 영화 정주행하기\n- 영화 속 주옥같은 대사와 감정을 다이어리에 기록" },
+            { title: "플라워 마켓에서 직접 고른 꽃으로 화병 채우기 💐", desc: "- 싱그러운 생화를 직접 골라 조화롭게 손질하기\n- 화병에 우아하게 꽂아 방 안의 공기마저 화사하게" },
+            { title: "유쾌한 파티 게임으로 일상의 스트레스 타파 🎮", desc: "- 스마트한 두뇌 회전과 위트 있는 게임으로 리프레시\n- 지루할 틈 없는 짜릿한 승부로 엔돌핀 충전하기" },
+            { title: "모던 캘리그라피로 감성적인 손글씨 남기기 ✍️", desc: "- 만년필의 사각거리는 소리와 함께 감성 글씨체 연마\n- 가슴에 새기고 싶은 명언을 예술적으로 적어보기" },
+            { title: "골목길 숨겨진 독립 서점 투어 및 도서 쇼핑 📚", desc: "- 고요하고 아기자기한 감성의 독립 서점 방문하기\n- 개성 넘치는 독립 출판물 속에서 영감 얻기" },
+            { title: "여름방학 총결산 및 다음 시즌 위시리스트 작성 📝", desc: "- 방학 동안 이뤄낸 눈부신 갓생 성과들 우아하게 회고\n- 다가올 미래를 위한 새로운 럭셔리 위시리스트 구상" }
+        ];
 
-</div>
+        let completedDays = JSON.parse(localStorage.getItem('gangnam_yojja_mincho_days')) || {};
+        
+        const todayReal = new Date();
+        let selectedDateIndex = 0; 
 
-<div id="calendar"></div>
+        datesArray.forEach((d, idx) => {
+            if (d.getDate() === todayReal.getDate() && d.getMonth() === todayReal.getMonth() && d.getFullYear() === todayReal.getFullYear()) {
+                selectedDateIndex = idx;
+            }
+        });
 
-<div class="footer">
-🌴 즐거운 여름방학 보내세요!
-</div>
+        const dateGrid = document.getElementById('dateGrid');
+        const selectedDateTitle = document.getElementById('selectedDateTitle');
+        const missionContainer = document.getElementById('missionContainer');
+        const expFill = document.getElementById('expFill');
+        const expText = document.getElementById('expText');
+        const scoreText = document.getElementById('scoreText');
+        const levelBadge = document.getElementById('levelBadge');
 
-</div>
+        function renderCalendar() {
+            const labels = Array.from(dateGrid.querySelectorAll('.day-label'));
+            dateGrid.innerHTML = '';
+            labels.forEach(label => dateGrid.appendChild(label));
 
-<script>
-
-const vacationStart = new Date(2026,6,24);
-const vacationEnd = new Date(2026,7,19);
-
-const today = new Date();
-
-const months = [
-    {month:6,title:"7월"},
-    {month:7,title:"8월"}
-];
-
-const week=["일","월","화","수","목","금","토"];
-
-const calendar=document.getElementById("calendar");
-
-const STORAGE_KEY="summerVacation2026";
-
-let checkedDays=JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-
-const totalVacationDays=
-Math.floor((vacationEnd-vacationStart)/(1000*60*60*24))+1;
-
-function save(){
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(checkedDays));
-}
-
-function updateInfo(){
-
-    const count=Object.keys(checkedDays).length;
-
-    document.getElementById("checkedCount").textContent=count;
-
-    const percent=Math.round(count/totalVacationDays*100);
-
-    document.getElementById("progressText").textContent=
-        percent+"% ("+count+"/"+totalVacationDays+"일)";
-
-    document.getElementById("progressBar").style.width=
-        percent+"%";
-
-}
-
-months.forEach(info=>{
-
-    const section=document.createElement("div");
-    section.className="month";
-
-    const title=document.createElement("h2");
-    title.textContent=`2026년 ${info.title}`;
-    section.appendChild(title);
-
-    const weekdays=document.createElement("div");
-    weekdays.className="weekdays";
-
-    week.forEach(day=>{
-
-        const d=document.createElement("div");
-        d.textContent=day;
-        weekdays.appendChild(d);
-
-    });
-
-    section.appendChild(weekdays);
-
-    const days=document.createElement("div");
-    days.className="days";
-
-    const firstDay=new Date(2026,info.month,1).getDay();
-    const lastDate=new Date(2026,info.month+1,0).getDate();
-
-    for(let i=0;i<firstDay;i++){
-
-        const empty=document.createElement("div");
-        empty.className="empty";
-        days.appendChild(empty);
-
-    }
-
-    for(let d=1;d<=lastDate;d++){
-
-        const cell=document.createElement("div");
-
-        const current=new Date(2026,info.month,d);
-
-        const key=current.toISOString().split("T")[0];
-
-        const num=document.createElement("div");
-        num.className="date";
-        num.textContent=d;
-        cell.appendChild(num);
-
-        const isVacation=current>=vacationStart && current<=vacationEnd;
-
-        if(isVacation){
-
-            cell.classList.add("vacation");
-
-            if(checkedDays[key]){
-
-                cell.classList.add("checked");
-
-                const mark=document.createElement("div");
-                mark.className="checkmark";
-                mark.textContent="✔";
-                cell.appendChild(mark);
-
+            for (let i = 0; i < startDayOfWeek; i++) {
+                const emptyCell = document.createElement('div');
+                dateGrid.appendChild(emptyCell);
             }
 
-            cell.addEventListener("click",()=>{
+            datesArray.forEach((dateObj, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'day-cell';
+                
+                const dateNum = dateObj.getDate();
+                const monthNum = dateObj.getMonth() + 1;
+                const dateKey = `${monthNum}-${dateNum}`;
 
-                if(checkedDays[key]){
-
-                    delete checkedDays[key];
-
-                }else{
-
-                    checkedDays[key]=true;
-
+                if (completedDays[dateKey]) {
+                    cell.classList.add('completed');
                 }
 
-                save();
-                location.reload();
+                if (dateObj.getDate() === todayReal.getDate() && dateObj.getMonth() === todayReal.getMonth() && dateObj.getFullYear() === todayReal.getFullYear()) {
+                    cell.classList.add('today');
+                }
 
+                if (index === selectedDateIndex) {
+                    cell.style.outline = '3.5px solid #ff007f';
+                } else {
+                    cell.style.outline = 'none';
+                }
+
+                cell.innerHTML = `
+                    <span class="date-num">${dateNum}</span>
+                    <span class="day-status-icon">${completedDays[dateKey] ? '💎' : ''}</span>
+                `;
+
+                cell.onclick = () => {
+                    selectedDateIndex = index;
+                    renderCalendar();
+                    renderDetailPanel();
+                };
+
+                dateGrid.appendChild(cell);
             });
 
+            updateStatus();
         }
 
-        if(
-            current.getFullYear()===today.getFullYear() &&
-            current.getMonth()===today.getMonth() &&
-            current.getDate()===today.getDate()
-        ){
+        function renderDetailPanel() {
+            const dateObj = datesArray[selectedDateIndex];
+            const monthNum = dateObj.getMonth() + 1;
+            const dateNum = dateObj.getDate();
+            const dateKey = `${monthNum}-${dateNum}`;
+            
+            selectedDateTitle.innerText = `${monthNum}월 ${dateNum}일 (${getDayName(dateObj.getDay())}) 럭셔리 미션`;
 
-            cell.classList.add("today");
+            const isCompleted = completedDays[dateKey] || false;
+            const currentMission = dailyHobbyMissions[selectedDateIndex % dailyHobbyMissions.length];
 
-            const badge=document.createElement("div");
-            badge.className="badge";
-            badge.textContent="⭐ 오늘 ⭐";
-            cell.appendChild(badge);
-
+            missionContainer.innerHTML = `
+                <div class="mission-box">
+                    <input type="checkbox" id="missionCheck" ${isCompleted ? 'checked' : ''} onchange="toggleMission('${dateKey}')">
+                    <div class="mission-content">
+                        <label for="missionCheck">${currentMission.title}</label>
+                        <span>${currentMission.desc.replace(/\n/g, '<br>')}</span>
+                    </div>
+                </div>
+            `;
         }
 
-        days.appendChild(cell);
+        function getDayName(dayIndex) {
+            return ['일', '월', '화', '수', '목', '금', '토'][dayIndex];
+        }
 
-    }
+        function toggleMission(dateKey) {
+            const checkbox = document.getElementById('missionCheck');
+            completedDays[dateKey] = checkbox.checked;
+            localStorage.setItem('gangnam_yojja_mincho_days', JSON.stringify(completedDays));
+            renderCalendar();
+            renderDetailPanel();
+        }
 
-    section.appendChild(days);
+        function updateStatus() {
+            const totalDays = datesArray.length;
+            const completedCount = Object.values(completedDays).filter(val => val === true).length;
+            const percentage = Math.round((completedCount / totalDays) * 100);
 
-    calendar.appendChild(section);
+            expFill.style.width = `${percentage}%`;
+            expText.innerText = `전체 달성도: ${percentage}%`;
+            scoreText.innerText = `${completedCount} / ${totalDays}일 완료`;
 
-});
+            if (percentage >= 80) {
+                levelBadge.innerText = "👑 럭셔리 갓생 마스터";
+            } else if (percentage >= 60) {
+                levelBadge.innerText = "🔥 쌈뽕 폭발 핫걸";
+            } else if (percentage >= 40) {
+                levelBadge.innerText = "⚡ 빛나는 레인보우 뮤즈";
+            } else if (percentage >= 20) {
+                levelBadge.innerText = "🌸 프리티 루키";
+            } else {
+                levelBadge.innerText = "💅 강남여짜 럭셔리 루키";
+            }
+        }
 
-updateInfo();
+        function resetData() {
+            if (confirm("정말 모든 기록을 초기화하시겠습니까?")) {
+                localStorage.removeItem('gangnam_yojja_mincho_days');
+                completedDays = {};
+                renderCalendar();
+                renderDetailPanel();
+            }
+        }
 
-document.getElementById("resetBtn").addEventListener("click",()=>{
-
-    if(confirm("체크한 기록을 모두 지울까요?")){
-
-        checkedDays={};
-
-        save();
-
-        location.reload();
-
-    }
-
-});
-
-</script>
-
+        renderCalendar();
+        renderDetailPanel();
+    </script>
 </body>
 </html>
