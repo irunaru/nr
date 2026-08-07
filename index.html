@@ -1,794 +1,855 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>키라키라 마법소녀 드레스업 스튜디오</title>
-    <style>
-        :root {
-            --primary-pink: #ff69b4;
-            --light-pink: #ffebf0;
-            --accent-purple: #9370db;
-            --sky-blue: #87ceeb;
-            --gold: #ffd700;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        body {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #a1c4fd 100%);
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            touch-action: manipulation;
-            padding: 0;
-            margin: 0;
-        }
-
-        .phone-frame {
-            width: 100%;
-            max-width: 375px;
-            height: 100vh;
-            height: -webkit-fill-available;
-            max-height: 812px;
-            background: #fff0f5;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            border: 3px solid #fff;
-            border-radius: 0;
-        }
-
-        @media (min-width: 376px) {
-            .phone-frame {
-                border-radius: 28px;
-                height: 92vh;
-                height: calc(92vh - var(--safe-bottom));
-                max-height: 820px;
-            }
-        }
-
-        .header {
-            padding: 10px 14px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 2px solid #ffccd5;
-            z-index: 10;
-            flex-shrink: 0;
-        }
-
-        .title {
-            font-size: 17px;
-            font-weight: 900;
-            background: linear-gradient(45deg, #ff1493, #8a2be2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: -0.3px;
-        }
-
-        .header-btns {
-            display: flex;
-            gap: 8px;
-        }
-
-        .icon-btn {
-            background: #fff;
-            border: 2px solid #ffb6c1;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            min-width: 38px;
-            min-height: 38px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 18px;
-            -webkit-tap-highlight-color: transparent;
-            touch-action: manipulation;
-        }
-
-        .icon-btn:active {
-            transform: scale(0.88);
-            background: #fff0f5;
-        }
-
-        .stage {
-            flex: 1;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            transition: background 0.5s ease;
-            min-height: 0;
-        }
-
-        .bg-room {
-            background: linear-gradient(135deg, #fff0f5 0%, #ffe4e1 100%);
-        }
-        .bg-castle {
-            background: linear-gradient(135deg, #e0bbe4 0%, #957dad 100%);
-        }
-        .bg-garden {
-            background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
-        }
-        .bg-stage {
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-        }
-
-        .character-container {
-            width: 250px;
-            height: 340px;
-            max-width: 90vw;
-            max-height: 55vh;
-            position: relative;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: floatChar 3s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatChar {
-            0% {
-                transform: translateY(0px);
-            }
-            100% {
-                transform: translateY(-6px);
-            }
-        }
-
-        .layer {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            pointer-events: none;
-        }
-
-        .layer svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.07));
-        }
-
-        .control-panel {
-            background: rgba(255, 255, 255, 0.96);
-            border-top-left-radius: 24px;
-            border-top-right-radius: 24px;
-            box-shadow: 0 -5px 25px rgba(255, 105, 180, 0.18);
-            display: flex;
-            flex-direction: column;
-            z-index: 10;
-            border-top: 3px solid #ffccd5;
-            flex-shrink: 0;
-            padding-bottom: var(--safe-bottom);
-        }
-
-        .category-tabs {
-            display: flex;
-            overflow-x: auto;
-            padding: 10px 10px 6px 10px;
-            gap: 7px;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .category-tabs::-webkit-scrollbar {
-            display: none;
-        }
-
-        .tab-btn {
-            background: #fff5f8;
-            border: 2px solid #ffccd5;
-            border-radius: 15px;
-            padding: 8px 12px;
-            font-size: 12px;
-            font-weight: bold;
-            color: #d81b60;
-            white-space: nowrap;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .tab-btn.active {
-            background: linear-gradient(135deg, #ff69b4, #ff1493);
-            color: white;
-            border-color: #ff1493;
-            box-shadow: 0 4px 12px rgba(255, 20, 147, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .item-selector {
-            height: 100px;
-            padding: 6px 10px 12px 10px;
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            align-items: center;
-            scrollbar-width: thin;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .item-card {
-            min-width: 66px;
-            height: 80px;
-            background: #fff;
-            border: 2px solid #ffd1dc;
-            border-radius: 16px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            padding: 3px;
-            flex-shrink: 0;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .item-card.selected {
-            border-color: #ff1493;
-            background: #fff0f5;
-            box-shadow: 0 6px 14px rgba(255, 20, 147, 0.22);
-            transform: scale(1.03);
-        }
-
-        .item-preview {
-            width: 44px;
-            height: 44px;
-            pointer-events: none;
-        }
-
-        .item-preview svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .item-name {
-            font-size: 10px;
-            color: #666;
-            margin-top: 3px;
-            font-weight: bold;
-            text-align: center;
-            white-space: nowrap;
-            pointer-events: none;
-            line-height: 1.1;
-        }
-
-        .action-bar {
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 12px 12px 12px;
-            background: #fff;
-            border-top: 1px solid #ffebf0;
-            gap: 8px;
-        }
-
-        .action-btn {
-            flex: 1;
-            padding: 12px 6px;
-            border: none;
-            border-radius: 14px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 4px;
-            transition: all 0.2s;
-            min-height: 44px;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
-            opacity: 0.85;
-        }
-
-        .btn-random {
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-            color: #2b6cb0;
-        }
-        .btn-reset {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-            color: #c05621;
-        }
-        .btn-save {
-            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-            color: #b83280;
-        }
-
-        .sparkle {
-            position: absolute;
-            pointer-events: none;
-            z-index: 20;
-            animation: sparkleAnim 0.8s linear forwards;
-        }
-
-        @keyframes sparkleAnim {
-            0% {
-                transform: scale(0) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1.5) rotate(180deg);
-                opacity: 0;
-            }
-        }
-
-        /* 아이폰 SE2 등 작은 화면에서 추가 최적화 */
-        @media (max-width: 374px) {
-            .character-container {
-                width: 220px;
-                height: 300px;
-            }
-            .item-card {
-                min-width: 58px;
-                height: 72px;
-            }
-            .item-preview {
-                width: 38px;
-                height: 38px;
-            }
-            .tab-btn {
-                font-size: 11px;
-                padding: 7px 10px;
-            }
-            .action-btn {
-                font-size: 12px;
-                padding: 10px 4px;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>✨ 로블록스 프린세스 3D ✨</title>
+  <style>
+    :root {
+      --safe: env(safe-area-inset-bottom, 0px);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fecfef 50%, #a1c4fd);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    .phone {
+      width: 100%;
+      max-width: 390px;
+      height: 100vh;
+      max-height: 844px;
+      background: rgba(255, 244, 248, 0.4);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 3px solid #fff;
+      position: relative;
+    }
+    @media (min-width: 391px) {
+      .phone {
+        height: 94vh;
+        border-radius: 28px;
+        box-shadow: 0 18px 50px #0002;
+      }
+    }
+    .header {
+      height: 58px;
+      flex-shrink: 0;
+      padding: 8px 12px;
+      background: #fffffff2;
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #ffd5e2;
+      z-index: 20;
+    }
+    .title {
+      font-size: 17px;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(45deg, #ff1493, #8054d6);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+    .headerBtns {
+      display: flex;
+      gap: 7px;
+    }
+    .iconBtn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 2px solid #ffb6c9;
+      background: white;
+      font-size: 18px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .iconBtn:active,
+    .action:active,
+    .tab:active,
+    .card:active {
+      transform: scale(0.94);
+    }
+    .stage {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .stage canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      animation: spark 0.9s ease-out forwards;
+      z-index: 30;
+    }
+    @keyframes spark {
+      0% {
+        transform: scale(0) rotate(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1.7) rotate(180deg);
+        opacity: 0;
+      }
+    }
+    .panel {
+      flex-shrink: 0;
+      background: #fffffff7;
+      border-top: 3px solid #ffd3e1;
+      border-radius: 24px 24px 0 0;
+      box-shadow: 0 -6px 25px #ff69b42b;
+      z-index: 20;
+      padding-bottom: var(--safe);
+    }
+    .tabs {
+      display: flex;
+      gap: 7px;
+      padding: 9px 10px 5px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tabs::-webkit-scrollbar {
+      display: none;
+    }
+    .tab {
+      flex-shrink: 0;
+      min-height: 39px;
+      padding: 7px 11px;
+      border-radius: 15px;
+      border: 2px solid #ffd1dd;
+      background: #fff5f8;
+      color: #c2185b;
+      font-size: 12px;
+      font-weight: 800;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: white;
+      border-color: #ff1493;
+    }
+    .selector {
+      height: 96px;
+      padding: 6px 10px 10px;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      align-items: center;
+      scrollbar-width: thin;
+    }
+    .card {
+      width: 70px;
+      height: 80px;
+      flex: 0 0 70px;
+      border: 2px solid #ffd3df;
+      border-radius: 16px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+    .card.selected {
+      border-color: #ff1493;
+      background: #fff0f6;
+      box-shadow: 0 5px 13px #ff149333;
+      transform: scale(1.03);
+    }
+    .preview {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+    .color-dot {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #fff;
+      box-shadow: 0 2px 6px #0002;
+      margin-bottom: 4px;
+    }
+    .name {
+      font-size: 9px;
+      font-weight: 800;
+      color: #666;
+      white-space: nowrap;
+    }
+    .actions {
+      display: flex;
+      gap: 8px;
+      padding: 8px 11px 11px;
+      background: #fff;
+      border-top: 1px solid #ffe7ef;
+    }
+    .action {
+      flex: 1;
+      min-height: 44px;
+      border: 0;
+      border-radius: 14px;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .random {
+      background: linear-gradient(135deg, #a9c9ff, #d8efff);
+      color: #28629b;
+    }
+    .reset {
+      background: linear-gradient(135deg, #ffe4cc, #ffc19e);
+      color: #a44b20;
+    }
+    .pose {
+      background: linear-gradient(135deg, #d8b4fe, #f0abfc);
+      color: #7e22ce;
+    }
+    .save {
+      background: linear-gradient(135deg, #ff9ca8, #ffd1ed);
+      color: #a62c72;
+    }
+    .toast {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.8);
+      background: #ffffffee;
+      backdrop-filter: blur(10px);
+      padding: 14px 24px;
+      border-radius: 20px;
+      font-weight: 900;
+      color: #ff1493;
+      font-size: 15px;
+      pointer-events: none;
+      opacity: 0;
+      transition: all 0.3s ease;
+      z-index: 50;
+      box-shadow: 0 8px 30px #ff69b440;
+      border: 2px solid #ffd3e1;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  </style>
 </head>
 <body>
+  <div class="phone">
+    <header class="header">
+      <div class="title">✨ 로블록스 프린세스 ✨</div>
+      <div class="headerBtns">
+        <button class="iconBtn" id="poseBtn" aria-label="포즈">🙌</button>
+        <button class="iconBtn" id="bgBtn" aria-label="배경 변경">🏰</button>
+        <button class="iconBtn" id="soundBtn" aria-label="효과음">🎵</button>
+      </div>
+    </header>
 
-<div class="phone-frame">
-    <div class="header">
-        <div class="title">✨ 키라키라 프린세스 ✨</div>
-        <div class="header-btns">
-            <button class="icon-btn" id="bgToggleBtn" title="배경 변경" aria-label="배경 변경">🏰</button>
-            <button class="icon-btn" id="soundBtn" title="효과음" aria-label="효과음 켜기/끄기">🎵</button>
-        </div>
-    </div>
+    <main class="stage" id="stage">
+      <div class="toast" id="toast"></div>
+    </main>
 
-    <div class="stage bg-room" id="stageBg">
-        <div class="character-container" id="characterStage">
-            <!-- 올바른 오버레이 레이어 순서 (뒤에서 앞으로) -->
-            <div class="layer" id="layer-wings"></div>
-            <div class="layer" id="layer-body"></div>
-            <div class="layer" id="layer-shoes"></div>
-            <div class="layer" id="layer-dress"></div>
-            <div class="layer" id="layer-hair"></div>
-            <div class="layer" id="layer-tiara"></div>
-            <div class="layer" id="layer-accessory"></div>
-        </div>
-    </div>
+    <section class="panel">
+      <div class="tabs" id="tabs"></div>
+      <div class="selector" id="selector"></div>
+      <div class="actions">
+        <button class="action random" id="randomBtn">🎲 랜덤</button>
+        <button class="action reset" id="resetBtn">🔄 초기화</button>
+        <button class="action pose" id="poseActionBtn">🙌 포즈</button>
+        <button class="action save" id="saveBtn">📸 저장</button>
+      </div>
+    </section>
+  </div>
 
-    <div class="control-panel">
-        <div class="category-tabs" id="categoryTabs">
-            <button class="tab-btn active" data-category="dress">👗 드레스</button>
-            <button class="tab-btn" data-category="hair">💇‍♀️ 헤어</button>
-            <button class="tab-btn" data-category="shoes">👠 신발</button>
-            <button class="tab-btn" data-category="tiara">👑 티아라</button>
-            <button class="tab-btn" data-category="wings">🧚 날개</button>
-            <button class="tab-btn" data-category="accessory">✨ 액세서리</button>
-        </div>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.126.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.126.0/examples/jsm/"
+      }
+    }
+  </script>
 
-        <div class="item-selector" id="itemSelector"></div>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-        <div class="action-bar">
-            <button class="action-btn btn-random" id="randomBtn">🎲 랜덤코디</button>
-            <button class="action-btn btn-reset" id="resetBtn">🔄 초기화</button>
-            <button class="action-btn btn-save" id="saveBtn">📸 저장하기</button>
-        </div>
-    </div>
-</div>
+    const $ = (sel) => document.querySelector(sel);
+    const stage = $('#stage');
 
-<script>
-    (function() {
-        let soundEnabled = true;
-        let audioCtx = null;
+    // ---------- 3D 씬 ----------
+    const scene = new THREE.Scene();
+    scene.background = null;
 
-        function initAudio() {
-            if (!audioCtx) {
-                try {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                } catch (e) {
-                    console.warn('Web Audio API not supported');
-                    soundEnabled = false;
-                    updateSoundButton();
-                    return null;
-                }
-            }
-            if (audioCtx && audioCtx.state === 'suspended') {
-                // resume()은 Promise를 반환하지만 여기서는 상태만 확인하고 실제 재생은 playSound에서 처리
-                audioCtx.resume().catch(() => {});
-            }
-            return audioCtx;
-        }
+    const camera = new THREE.PerspectiveCamera(45, stage.clientWidth / stage.clientHeight, 0.1, 1000);
+    camera.position.set(4, 2.8, 7);
+    camera.lookAt(0, 1.4, 0);
 
-        function updateSoundButton() {
-            const btn = document.getElementById('soundBtn');
-            if (btn) btn.textContent = soundEnabled ? '🎵' : '🔇';
-        }
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+    renderer.setSize(stage.clientWidth, stage.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.setClearColor(0x000000, 0);
+    stage.appendChild(renderer.domElement);
 
-        // 수정된 playSound 함수 - AudioContext resume 완료 후 소리 재생
-        function playSound(type) {
-            if (!soundEnabled) return;
-            const ctx = initAudio();
-            if (!ctx) return;
+    // 조명
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const dirLight = new THREE.DirectionalLight(0xfff5e6, 0.8);
+    dirLight.position.set(5, 10, 7);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.set(1024, 1024);
+    dirLight.shadow.camera.near = 0.5;
+    dirLight.shadow.camera.far = 50;
+    scene.add(dirLight);
+    const backLight = new THREE.DirectionalLight(0xe0c0ff, 0.4);
+    backLight.position.set(-3, 2, -4);
+    scene.add(backLight);
 
-            // 실제 소리 재생 로직을 함수로 분리
-            const run = () => {
-                try {
-                    const osc = ctx.createOscillator();
-                    const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
+    // 무대
+    const stageGeo = new THREE.CylinderGeometry(2.2, 2.4, 0.15, 32);
+    const stageMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: 0.2, metalness: 0.1 });
+    const stageMesh = new THREE.Mesh(stageGeo, stageMat);
+    stageMesh.position.y = -0.95;
+    stageMesh.receiveShadow = true;
+    scene.add(stageMesh);
 
-                    const now = ctx.currentTime;
+    const ringGeo = new THREE.TorusGeometry(2.3, 0.06, 8, 32);
+    const ringMat = new THREE.MeshStandardMaterial({ color: '#ff85b3', roughness: 0.4 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.position.y = -0.87;
+    scene.add(ring);
 
-                    if (type === 'click') {
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(587.33, now);
-                        osc.frequency.exponentialRampToValueAtTime(880, now + 0.08);
-                        gain.gain.setValueAtTime(0.12, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
-                        osc.start(now);
-                        osc.stop(now + 0.09);
-                    } else if (type === 'magic') {
-                        osc.type = 'triangle';
-                        osc.frequency.setValueAtTime(440, now);
-                        osc.frequency.setValueAtTime(554.37, now + 0.06);
-                        osc.frequency.setValueAtTime(659.25, now + 0.12);
-                        osc.frequency.setValueAtTime(880, now + 0.2);
-                        gain.gain.setValueAtTime(0.08, now);
-                        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
-                        osc.start(now);
-                        osc.stop(now + 0.36);
-                    }
-                } catch (e) {
-                    console.warn('Sound play error:', e);
-                }
-            };
+    const groundGeo = new THREE.CircleGeometry(2.5, 32);
+    const groundMat = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.0 });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.9;
+    ground.receiveShadow = true;
+    scene.add(ground);
 
-            // suspended 상태면 resume 완료 후 실행, 아니면 바로 실행
-            if (ctx.state === 'suspended') {
-                ctx.resume().then(run).catch(() => {});
-            } else {
-                run();
-            }
-        }
+    // OrbitControls
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.target.set(0, 1.3, 0);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 3.5;
+    controls.maxDistance = 9;
+    controls.maxPolarAngle = Math.PI / 1.8;
+    controls.minPolarAngle = 0.3;
+    controls.update();
 
-        // 캐릭터와 의상 SVG 데이터 정의
-        const db = {
-            body: [{
-                id: 'default',
-                name: '기본베이스',
-                svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <rect x="92" y="90" width="16" height="25" fill="#ffe0bd" rx="5"/>
-                <path d="M80 110 Q100 120 120 110 L115 150 Q100 155 85 150 Z" fill="#ffe0bd"/>
-                <path d="M82 112 Q100 120 118 112 L115 135 Q100 140 85 135 Z" fill="#ffb6c1"/>
-                <rect x="86" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
-                <rect x="103" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
-                <path d="M80 112 Q65 140 70 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
-                <path d="M120 112 Q135 140 130 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
-                <ellipse cx="100" cy="70" rx="30" ry="34" fill="#ffe0bd"/>
-                <circle cx="69" cy="72" r="6" fill="#ffe0bd"/>
-                <circle cx="131" cy="72" r="6" fill="#ffe0bd"/>
-                <path d="M82 58 Q88 54 94 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <path d="M106 58 Q112 54 118 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
-                <ellipse cx="88" cy="68" rx="6" ry="8" fill="#4b2e83"/>
-                <circle cx="86" cy="65" r="2.5" fill="#fff"/>
-                <circle cx="89" cy="71" r="1.2" fill="#fff"/>
-                <ellipse cx="112" cy="68" rx="6" ry="8" fill="#4b2e83"/>
-                <circle cx="110" cy="65" r="2.5" fill="#fff"/>
-                <circle cx="113" cy="71" r="1.2" fill="#fff"/>
-                <ellipse cx="80" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
-                <ellipse cx="120" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
-                <circle cx="100" cy="74" r="1" fill="#e5989b"/>
-                <path d="M96 82 Q100 87 104 82" stroke="#d81b60" stroke-width="2" stroke-linecap="round" fill="none"/>
-            </svg>`
-            }],
-            dress: [
-                { id: 'none', name: '속옷차림', svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                {
-                    id: 'dress1',
-                    name: '핑크스타',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                    <linearGradient id="pinkGrad1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#ff69b4"/>
-                        <stop offset="100%" stop-color="#ff1493"/>
-                    </linearGradient>
-                </defs>
-                <path d="M78 110 Q100 115 122 110 L145 205 Q100 225 55 205 Z" fill="url(#pinkGrad1)"/>
-                <path d="M78 110 Q100 125 122 110 L130 145 Q100 155 70 145 Z" fill="#fff" opacity="0.5"/>
-                <circle cx="100" cy="130" r="7" fill="#ffd700"/>
-            </svg>`
-                },
-                {
-                    id: 'dress2',
-                    name: '라벤더문',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                    <linearGradient id="purpleGrad1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#dda0dd"/>
-                        <stop offset="100%" stop-color="#8a2be2"/>
-                    </linearGradient>
-                </defs>
-                <path d="M78 110 Q100 115 122 110 L150 210 Q100 230 50 210 Z" fill="url(#purpleGrad1)"/>
-                <polygon points="100,125 104,137 117,137 106,145 110,157 100,149 90,157 94,145 83,137 96,137" fill="#ffd700"/>
-            </svg>`
-                },
-                {
-                    id: 'dress3',
-                    name: '스카이엔젤',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <defs>
-                    <linearGradient id="skyGrad1" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#b0e0e6"/>
-                        <stop offset="100%" stop-color="#1e90ff"/>
-                    </linearGradient>
-                </defs>
-                <path d="M78 110 Q100 115 122 110 L155 215 Q100 230 45 215 Z" fill="url(#skyGrad1)"/>
-                <ellipse cx="100" cy="160" rx="35" ry="12" fill="#fff" opacity="0.6"/>
-            </svg>`
-                }
-            ],
-            hair: [
-                {
-                    id: 'hair1',
-                    name: '트윈웨이브',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <path d="M68 60 Q35 80 45 150 Q30 110 60 70 Z" fill="#ff69b4"/>
-                <path d="M132 60 Q165 80 155 150 Q170 110 140 70 Z" fill="#ff69b4"/>
-                <path d="M70 52 Q100 30 130 52 Q136 68 126 62 Q100 50 74 62 Q64 68 70 52 Z" fill="#ff1493"/>
-            </svg>`
-                },
-                {
-                    id: 'hair2',
-                    name: '롱실키',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <path d="M68 52 Q100 25 132 52 Q142 80 138 180 Q122 170 128 90 Q100 65 72 90 Q78 170 62 180 Q58 80 68 52 Z" fill="#9370db"/>
-            </svg>`
-                },
-                {
-                    id: 'hair3',
-                    name: '포니테일',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                <path d="M125 55 Q175 60 160 140 Q145 120 135 85 Z" fill="#ffd700"/>
-                <path d="M70 52 Q100 28 130 52 Q135 68 122 62 Q100 52 78 62 Q65 68 70 52 Z" fill="#ffcc00"/>
-            </svg>`
-                }
-            ],
-            shoes: [
-                { id: 'shoes1', name: '핑크구두',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><ellipse cx="91" cy="242" rx="8" ry="5" fill="#ff1493"/><ellipse cx="109" cy="242" rx="8" ry="5" fill="#ff1493"/></svg>` },
-                { id: 'shoes2', name: '블루부츠',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M83 225 L83 245 L97 245 L97 225 Z" fill="#1e90ff"/><path d="M103 225 L103 245 L117 245 L117 225 Z" fill="#1e90ff"/></svg>` }
-            ],
-            tiara: [
-                { id: 'none', name: '없음',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                { id: 'tiara1', name: '하트티아라',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M82 42 L91 28 L100 38 L109 28 L118 42 Z" fill="#ffd700"/><circle cx="100" cy="33" r="3" fill="#ff1493"/></svg>` },
-                { id: 'tiara2', name: '스타크라운',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><polygon points="100,22 103,30 112,30 105,35 107,43 100,38 93,43 95,35 88,30 97,30" fill="#ffd700"/></svg>` }
-            ],
-            wings: [
-                { id: 'none', name: '없음',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                { id: 'wings1', name: '페어리윙즈',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M68 110 Q28 80 38 120 Q58 140 73 130 Z" fill="#b0e0e6" opacity="0.8"/><path d="M132 110 Q172 80 162 120 Q142 140 127 130 Z" fill="#b0e0e6" opacity="0.8"/></svg>` }
-            ],
-            accessory: [
-                { id: 'none', name: '없음',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                { id: 'wand', name: '마법봉',
-                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><line x1="135" y1="160" x2="150" y2="130" stroke="#ffd700" stroke-width="3"/><polygon points="150,120 153,128 161,130 155,136 157,144 150,140 143,144 145,136 139,130 147,128" fill="#ff1493"/></svg>` }
-            ]
+    // ---------- 캐릭터 ----------
+    const character = new THREE.Group();
+    scene.add(character);
+
+    const matCfg = { roughness: 0.7, metalness: 0.1 };
+    const skinMat = new THREE.MeshStandardMaterial({ color: '#ffd6c2', ...matCfg });
+    const eyeWhiteMat = new THREE.MeshStandardMaterial({ color: '#ffffff', ...matCfg });
+    const eyePupilMat = new THREE.MeshStandardMaterial({ color: '#1c1420', ...matCfg });
+    const mouthMat = new THREE.MeshStandardMaterial({ color: '#c95b70', ...matCfg });
+    const blushMat = new THREE.MeshStandardMaterial({ color: '#ff7b98', transparent: true, opacity: 0.6, ...matCfg });
+
+    // 머리
+    const headGeo = new THREE.BoxGeometry(0.9, 0.9, 0.8);
+    const head = new THREE.Mesh(headGeo, skinMat);
+    head.position.y = 1.8;
+    head.castShadow = true;
+    head.receiveShadow = true;
+    character.add(head);
+
+    // 눈 (head 로컬 좌표, z=0.4에 정확히 맞춤)
+    function createEye(x, y) {
+      const whiteGeo = new THREE.BoxGeometry(0.22, 0.18, 0.02);
+      const white = new THREE.Mesh(whiteGeo, eyeWhiteMat);
+      white.position.set(x, y, 0.41);
+      head.add(white);
+
+      const pupilGeo = new THREE.BoxGeometry(0.1, 0.1, 0.03);
+      const pupil = new THREE.Mesh(pupilGeo, eyePupilMat);
+      pupil.position.set(x, y - 0.02, 0.42);
+      head.add(pupil);
+    }
+    createEye(-0.25, 0.15);
+    createEye(0.25, 0.15);
+
+    // 볼터치
+    const blushGeo = new THREE.BoxGeometry(0.15, 0.08, 0.02);
+    const blushLeft = new THREE.Mesh(blushGeo, blushMat);
+    blushLeft.position.set(-0.35, -0.05, 0.41);
+    head.add(blushLeft);
+    const blushRight = new THREE.Mesh(blushGeo, blushMat);
+    blushRight.position.set(0.35, -0.05, 0.41);
+    head.add(blushRight);
+
+    // 입
+    const mouthGeo = new THREE.BoxGeometry(0.18, 0.06, 0.02);
+    const mouth = new THREE.Mesh(mouthGeo, mouthMat);
+    mouth.position.set(0, -0.15, 0.41);
+    head.add(mouth);
+
+    // 몸통
+    const torsoGeo = new THREE.BoxGeometry(0.75, 1.1, 0.5);
+    const torso = new THREE.Mesh(torsoGeo, skinMat);
+    torso.position.y = 1.15;
+    torso.castShadow = true;
+    torso.receiveShadow = true;
+    character.add(torso);
+
+    // 관절
+    function createLimb(w, h, d, x, y, z, mat) {
+      const pivot = new THREE.Group();
+      pivot.position.set(x, y, z);
+      const geo = new THREE.BoxGeometry(w, h, d);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.y = -h / 2;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      pivot.add(mesh);
+      character.add(pivot);
+      return { pivot, mesh };
+    }
+
+    const leftArm = createLimb(0.3, 0.9, 0.3, -0.55, 1.7, 0, skinMat);
+    const rightArm = createLimb(0.3, 0.9, 0.3, 0.55, 1.7, 0, skinMat);
+    const leftLeg = createLimb(0.35, 1.0, 0.35, -0.23, 0.7, 0, skinMat);
+    const rightLeg = createLimb(0.35, 1.0, 0.35, 0.23, 0.7, 0, skinMat);
+
+    // ---------- 아이템 그룹 ----------
+    const itemsGroup = {
+      dress: new THREE.Group(),
+      shoes: new THREE.Group(),
+      hair: new THREE.Group(),
+      tiara: new THREE.Group(),
+      wings: new THREE.Group(),
+      accessory: new THREE.Group(),
+      'hair-back': new THREE.Group()
+    };
+    Object.keys(itemsGroup).forEach(k => character.add(itemsGroup[k]));
+
+    // ---------- 아이템 DB ----------
+    const db = {
+      dress: [
+        { id: 'none', name: '없음' },
+        { id: 'pinkstar', name: '핑크스타', color: '#ff77b0' },
+        { id: 'lavender', name: '라벤더', color: '#ad8de0' },
+        { id: 'sky', name: '하늘빛', color: '#7eccee' },
+        { id: 'stage', name: '무대용', color: '#d14e94' }
+      ],
+      shoes: [
+        { id: 'none', name: '없음' },
+        { id: 'pink', name: '핑크슈즈', color: '#ff5ea1', leftPos: [-0.23, 0.18, 0.05], rightPos: [0.23, 0.18, 0.05], scale: [0.38, 0.18, 0.4] },
+        { id: 'boots', name: '부츠', color: '#7699f0', leftPos: [-0.23, 0.16, 0.05], rightPos: [0.23, 0.16, 0.05], scale: [0.38, 0.45, 0.4] },
+        { id: 'sneaker', name: '운동화', color: '#ffffff', leftPos: [-0.23, 0.18, 0.05], rightPos: [0.23, 0.18, 0.05], scale: [0.38, 0.2, 0.42] }
+      ],
+      hair: [
+        { id: 'front1', name: '일자뱅', color: '#5a3e2e', type: 'wedge', pos: [0, 2.26, 0.42], scale: [0.92, 0.15, 0.3] },
+        { id: 'front2', name: '둥근뱅', color: '#5a3e2e', type: 'wedge', pos: [0, 2.28, 0.42], scale: [0.85, 0.12, 0.28] },
+        { id: 'front3', name: '옆머리', color: '#6d4c41', type: 'wedge', pos: [0, 2.26, 0.42], scale: [0.92, 0.15, 0.3] }
+      ],
+      'hair-back': [
+        { id: 'none', name: '없음' },
+        { id: 'long', name: '롱헤어', color: '#5a3e2e', type: 'back', pos: [0, 1.65, -0.42], scale: [0.8, 0.9, 0.3] },
+        { id: 'twin', name: '트윈테일', color: '#5a3e2e', type: 'twin', leftPos: [-0.45, 1.7, -0.38], rightPos: [0.45, 1.7, -0.38], scale: [0.25, 0.7, 0.25] },
+        { id: 'ponytail', name: '포니테일', color: '#5a3e2e', type: 'back', pos: [0.15, 2.05, -0.42], scale: [0.35, 0.65, 0.35] }
+      ],
+      tiara: [
+        { id: 'none', name: '없음' },
+        { id: 'heart', name: '하트티아라', color: '#ffd83d', type: 'tiara', pos: [0, 2.28, 0.42], scale: [0.7, 0.1, 0.2] },
+        { id: 'star', name: '별티아라', color: '#ffe05a', type: 'tiara', pos: [0, 2.3, 0.42], scale: [0.75, 0.12, 0.22] }
+      ],
+      wings: [
+        { id: 'none', name: '없음' },
+        { id: 'fairy', name: '요정날개', color: '#c4f0ff', type: 'wings', pos: [0, 1.4, -0.4], scale: [1.1, 0.7, 0.1] },
+        { id: 'crystal', name: '크리스탈', color: '#d5c5ff', type: 'wings', pos: [0, 1.4, -0.4], scale: [1.1, 0.7, 0.1] }
+      ],
+      accessory: [
+        { id: 'none', name: '없음' },
+        { id: 'wand', name: '마법봉', color: '#ff5ea1', type: 'wand', pos: [0.65, 0.55, 0.3], scale: [0.15, 0.8, 0.15] },
+        { id: 'necklace', name: '목걸이', color: '#ffd447', type: 'necklace', pos: [0, 1.55, 0.32], scale: [0.5, 0.05, 0.05] },
+        { id: 'ribbon', name: '리본', color: '#ff7eb3', type: 'necklace', pos: [0, 1.6, 0.32], scale: [0.45, 0.06, 0.06] }
+      ]
+    };
+
+    const outfit = {
+      dress: 'pinkstar',
+      shoes: 'pink',
+      hair: 'front1',
+      'hair-back': 'long',
+      tiara: 'heart',
+      wings: 'fairy',
+      accessory: 'wand'
+    };
+    const defaults = { ...outfit };
+
+    // ---------- 메쉬 생성 ----------
+    function clearGroup(group) {
+      while (group.children.length > 0) group.remove(group.children[0]);
+    }
+
+    function applyItem(category, itemId) {
+      const group = itemsGroup[category];
+      if (!group) return;
+      clearGroup(group);
+
+      const item = db[category].find(i => i.id === itemId);
+
+      // 드레스 벗을 때 몸통 다시 보이기
+      if (category === 'dress') {
+        torso.visible = (!item || item.id === 'none');
+      }
+
+      if (!item || item.id === 'none') return;
+
+      const mat = new THREE.MeshStandardMaterial({ color: item.color, roughness: 0.7, metalness: 0.1 });
+
+      if (category === 'dress') {
+        const bodiceGeo = new THREE.BoxGeometry(0.79, 0.55, 0.54);
+        const bodice = new THREE.Mesh(bodiceGeo, mat);
+        bodice.position.set(0, 1.05, 0);
+        bodice.castShadow = true;
+        bodice.receiveShadow = true;
+        group.add(bodice);
+
+        const skirtGeo = new THREE.CylinderGeometry(0.42, 0.9, 0.75, 16);
+        const skirt = new THREE.Mesh(skirtGeo, mat);
+        skirt.position.set(0, 0.4, 0);
+        skirt.castShadow = true;
+        skirt.receiveShadow = true;
+        group.add(skirt);
+        return;
+      }
+
+      if (item.type === 'wedge') {
+        const geo = new THREE.BoxGeometry(1, 0.2, 0.5);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.scale.set(...item.scale);
+        mesh.position.set(...item.pos);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+      } else if (item.type === 'back') {
+        const geo = new THREE.BoxGeometry(0.6, 1.2, 0.4);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.scale.set(...item.scale);
+        mesh.position.set(...item.pos);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+        group.add(mesh);
+      } else if (item.type === 'twin') {
+        const geo = new THREE.BoxGeometry(0.4, 1.0, 0.4);
+        const left = new THREE.Mesh(geo, mat);
+        left.position.set(...item.leftPos);
+        left.scale.set(...item.scale);
+        left.castShadow = true;
+        group.add(left);
+        const right = new THREE.Mesh(geo, mat);
+        right.position.set(...item.rightPos);
+        right.scale.set(...item.scale);
+        right.castShadow = true;
+        group.add(right);
+      } else if (item.type === 'tiara') {
+        const geo = new THREE.TorusGeometry(0.3, 0.08, 8, 8, Math.PI);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.rotation.x = Math.PI / 2;
+        mesh.rotation.z = Math.PI;
+        mesh.scale.set(...item.scale);
+        mesh.position.set(...item.pos);
+        mesh.castShadow = true;
+        group.add(mesh);
+      } else if (item.type === 'wings') {
+        const geo = new THREE.BoxGeometry(1.2, 0.8, 0.1);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.scale.set(...item.scale);
+        mesh.position.set(...item.pos);
+        mesh.castShadow = true;
+        group.add(mesh);
+      } else if (item.type === 'wand') {
+        const stickGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.8, 6);
+        const stick = new THREE.Mesh(stickGeo, new THREE.MeshStandardMaterial({ color: '#f2b93d', roughness: 0.3, metalness: 0.5 }));
+        stick.position.set(...item.pos);
+        stick.rotation.z = -0.4;
+        stick.castShadow = true;
+        group.add(stick);
+
+        const starGeo = new THREE.OctahedronGeometry(0.2);
+        const star = new THREE.Mesh(starGeo, mat);
+        star.position.set(item.pos[0] + 0.28, item.pos[1] + 0.45, item.pos[2]);
+        star.rotation.z = -0.4;
+        star.castShadow = true;
+        group.add(star);
+      } else if (item.type === 'necklace') {
+        const geo = new THREE.TorusGeometry(0.35, 0.06, 8, 16);
+        const mesh = new THREE.Mesh(geo, mat);
+        mesh.rotation.x = Math.PI / 2;
+        mesh.scale.set(...item.scale);
+        mesh.position.set(...item.pos);
+        mesh.castShadow = true;
+        group.add(mesh);
+      } else if (category === 'shoes') {
+        const shoeGeo = new THREE.BoxGeometry(0.35, 0.15, 0.35);
+        const left = new THREE.Mesh(shoeGeo, mat);
+        left.position.set(...item.leftPos);
+        left.scale.set(...item.scale);
+        left.castShadow = true;
+        group.add(left);
+        const right = new THREE.Mesh(shoeGeo, mat);
+        right.position.set(...item.rightPos);
+        right.scale.set(...item.scale);
+        right.castShadow = true;
+        group.add(right);
+      }
+    }
+
+    function updateAllItems() {
+      Object.keys(outfit).forEach(cat => applyItem(cat, outfit[cat]));
+    }
+    updateAllItems();
+
+    // ---------- UI ----------
+    const categories = [
+      ['dress', '👗 드레스'],
+      ['hair', '💇‍♀️ 앞머리'],
+      ['hair-back', '💇‍♀️ 뒷머리'],
+      ['shoes', '👟 신발'],
+      ['tiara', '👑 티아라'],
+      ['wings', '🧚 날개'],
+      ['accessory', '✨ 악세서리']
+    ];
+    let active = 'dress';
+    const tabsEl = $('#tabs');
+    const selectorEl = $('#selector');
+
+    function renderTabs() {
+      tabsEl.innerHTML = categories
+        .map(([id, label]) => `<button class="tab ${id === active ? 'active' : ''}" data-cat="${id}">${label}</button>`)
+        .join('');
+    }
+
+    function renderSelector(cat) {
+      selectorEl.innerHTML = '';
+      const items = db[cat] || [];
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'card' + (outfit[cat] === item.id ? ' selected' : '');
+        const hasColor = item.color && item.id !== 'none';
+        card.innerHTML = `
+          <div class="preview">${hasColor ? `<div class="color-dot" style="background:${item.color}"></div>` : '❌'}</div>
+          <div class="name">${item.name}</div>
+        `;
+        card.onclick = () => {
+          outfit[cat] = item.id;
+          applyItem(cat, item.id);
+          renderSelector(cat);
+          soundFx();
+          spawnSparkles(3);
         };
+        selectorEl.appendChild(card);
+      });
+      const selected = selectorEl.querySelector('.selected');
+      if (selected) setTimeout(() => selected.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' }), 10);
+    }
 
-        const currentOutfit = {
-            body: 'default',
-            dress: 'dress1',
-            hair: 'hair1',
-            shoes: 'shoes1',
-            tiara: 'tiara1',
-            wings: 'wings1',
-            accessory: 'wand'
-        };
+    tabsEl.onclick = e => {
+      const btn = e.target.closest('.tab');
+      if (!btn) return;
+      active = btn.dataset.cat;
+      renderTabs();
+      renderSelector(active);
+      soundFx();
+    };
 
-        const categoryTabs = document.getElementById('categoryTabs');
-        const itemSelector = document.getElementById('itemSelector');
-        const stageBg = document.getElementById('stageBg');
-        const soundBtn = document.getElementById('soundBtn');
+    // ---------- 배경 ----------
+    const bgColors = [null, '#d2e7ff', '#e8d4ff', '#ffe3d4', '#d4ffd8'];
+    let bgIndex = 0;
+    $('#bgBtn').onclick = () => {
+      bgIndex = (bgIndex + 1) % bgColors.length;
+      scene.background = bgColors[bgIndex] ? new THREE.Color(bgColors[bgIndex]) : null;
+      soundFx();
+    };
 
-        let activeCategory = 'dress';
+    // ---------- 효과음 ----------
+    let sound = true;
+    let audioCtx = null;
+    function soundFx(type = 'click') {
+      if (!sound) return;
+      try {
+        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.connect(g);
+        g.connect(audioCtx.destination);
+        o.type = type === 'magic' ? 'triangle' : 'sine';
+        o.frequency.setValueAtTime(type === 'magic' ? 440 : 590, audioCtx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+        g.gain.setValueAtTime(0.07, audioCtx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.18);
+        o.start();
+        o.stop(audioCtx.currentTime + 0.2);
+      } catch (e) {}
+    }
 
-        function updateLayers() {
-            Object.keys(currentOutfit).forEach(cat => {
-                const layerEl = document.getElementById(`layer-${cat}`);
-                if (layerEl) {
-                    const itemId = currentOutfit[cat];
-                    const itemObj = db[cat].find(i => i.id === itemId);
-                    layerEl.innerHTML = itemObj ? itemObj.svg : '';
-                }
-            });
-        }
+    $('#soundBtn').onclick = () => {
+      sound = !sound;
+      $('#soundBtn').textContent = sound ? '🎵' : '🔇';
+      if (sound) soundFx();
+    };
 
-        function renderItemSelector(category) {
-            if (!itemSelector || !db[category]) return;
-            itemSelector.innerHTML = '';
-            const items = db[category];
-            const currentId = currentOutfit[category];
+    function spawnSparkles(n) {
+      for (let i = 0; i < n; i++) {
+        const s = document.createElement('div');
+        s.className = 'sparkle';
+        s.textContent = ['✨', '✦', '💫'][i % 3];
+        s.style.left = 15 + Math.random() * 70 + '%';
+        s.style.top = 15 + Math.random() * 65 + '%';
+        s.style.fontSize = 13 + Math.random() * 12 + 'px';
+        stage.appendChild(s);
+        setTimeout(() => s.remove(), 950);
+      }
+    }
 
-            items.forEach(item => {
-                const card = document.createElement('div');
-                card.className = `item-card${currentId === item.id ? ' selected' : ''}`;
-                card.setAttribute('role', 'button');
-                card.setAttribute('aria-label', item.name);
-                card.setAttribute('tabindex', '0');
-                card.innerHTML = `
-                <div class="item-preview">${item.svg}</div>
-                <div class="item-name">${item.name}</div>
-            `;
-                card.addEventListener('click', () => {
-                    playSound('click');
-                    currentOutfit[category] = item.id;
-                    updateLayers();
-                    renderItemSelector(category);
-                    createSparkleEffect();
-                });
-                // 키보드 접근성
-                card.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        card.click();
-                    }
-                });
-                itemSelector.appendChild(card);
-            });
+    function showToast(msg) {
+      const t = $('#toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 1200);
+    }
 
-            // 선택된 아이템으로 스크롤
-            const selectedCard = itemSelector.querySelector('.item-card.selected');
-            if (selectedCard) {
-                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-            }
-        }
+    // ---------- 랜덤 / 초기화 / 저장 / 포즈 ----------
+    $('#randomBtn').onclick = () => {
+      Object.keys(outfit).forEach(cat => {
+        const arr = db[cat];
+        outfit[cat] = arr[Math.floor(Math.random() * arr.length)].id;
+      });
+      updateAllItems();
+      renderSelector(active);
+      soundFx('magic');
+      spawnSparkles(8);
+    };
 
-        // 카테고리 탭 이벤트
-        categoryTabs.addEventListener('click', (e) => {
-            const tabBtn = e.target.closest('.tab-btn');
-            if (!tabBtn) return;
-            playSound('click');
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            tabBtn.classList.add('active');
-            activeCategory = tabBtn.getAttribute('data-category');
-            renderItemSelector(activeCategory);
-        });
+    $('#resetBtn').onclick = () => {
+      Object.assign(outfit, defaults);
+      updateAllItems();
+      renderSelector(active);
+      soundFx();
+      spawnSparkles(3);
+    };
 
-        // 배경 변경
-        const bgList = ['bg-room', 'bg-castle', 'bg-garden', 'bg-stage'];
-        let bgIndex = 0;
-        document.getElementById('bgToggleBtn').addEventListener('click', () => {
-            playSound('click');
-            stageBg.classList.remove(bgList[bgIndex]);
-            bgIndex = (bgIndex + 1) % bgList.length;
-            stageBg.classList.add(bgList[bgIndex]);
-        });
+    $('#saveBtn').onclick = () => {
+      try {
+        renderer.render(scene, camera);
+        const dataURL = renderer.domElement.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = 'roblox-princess.png';
+        link.href = dataURL;
+        link.click();
+        showToast('📸 저장 완료!');
+        soundFx('magic');
+        spawnSparkles(10);
+      } catch (e) {
+        showToast('⚠️ 저장 실패');
+      }
+    };
 
-        // 효과음 토글
-        soundBtn.addEventListener('click', () => {
-            soundEnabled = !soundEnabled;
-            updateSoundButton();
-            if (soundEnabled) playSound('click');
-        });
+    const poses = ['idle', 'wave', 'cheer'];
+    let poseIndex = 0;
+    function applyPose() {
+      const p = poses[poseIndex];
+      const t = Date.now() * 0.001;
+      leftArm.pivot.rotation.set(0, 0, 0.1);
+      rightArm.pivot.rotation.set(0, 0, -0.1);
+      leftLeg.pivot.rotation.set(0, 0, 0);
+      rightLeg.pivot.rotation.set(0, 0, 0);
 
-        // 랜덤 코디
-        document.getElementById('randomBtn').addEventListener('click', () => {
-            playSound('magic');
-            Object.keys(db).forEach(cat => {
-                if (cat === 'body') return;
-                const items = db[cat];
-                const randIndex = Math.floor(Math.random() * items.length);
-                currentOutfit[cat] = items[randIndex].id;
-            });
-            updateLayers();
-            renderItemSelector(activeCategory);
-            createSparkleEffect();
-        });
+      if (p === 'wave') {
+        rightArm.pivot.rotation.z = Math.PI - 0.5 + Math.sin(t * 6) * 0.3;
+        leftArm.pivot.rotation.z = 0.2;
+      } else if (p === 'cheer') {
+        leftArm.pivot.rotation.z = 2.5;
+        rightArm.pivot.rotation.z = -2.5;
+      }
+    }
 
-        // 초기화
-        document.getElementById('resetBtn').addEventListener('click', () => {
-            playSound('click');
-            currentOutfit.dress = 'none';
-            currentOutfit.shoes = 'shoes1';
-            currentOutfit.tiara = 'none';
-            currentOutfit.wings = 'none';
-            currentOutfit.accessory = 'none';
-            currentOutfit.hair = 'hair1';
-            updateLayers();
-            renderItemSelector(activeCategory);
-        });
+    function nextPose() {
+      poseIndex = (poseIndex + 1) % poses.length;
+      const names = { idle: '기본', wave: '인사', cheer: '만세' };
+      showToast('🙌 ' + names[poses[poseIndex]]);
+      soundFx();
+    }
 
-        // 저장
-        document.getElementById('saveBtn').addEventListener('click', () => {
-            playSound('magic');
-            // iOS에서는 알림 대신 시각적 피드백 제공
-            const saveBtn = document.getElementById('saveBtn');
-            const originalText = saveBtn.textContent;
-            saveBtn.textContent = '✅ 저장 완료!';
-            saveBtn.style.background = 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)';
-            setTimeout(() => {
-                saveBtn.textContent = originalText;
-                saveBtn.style.background = '';
-            }, 1500);
-            createSparkleEffect();
-        });
+    $('#poseBtn').onclick = nextPose;
+    $('#poseActionBtn').onclick = nextPose;
 
-        function createSparkleEffect() {
-            const count = 4;
-            const fragment = document.createDocumentFragment();
-            for (let i = 0; i < count; i++) {
-                const sparkle = document.createElement('div');
-                sparkle.className = 'sparkle';
-                sparkle.textContent = '✨';
-                sparkle.style.left = `${Math.random() * 70 + 15}%`;
-                sparkle.style.top = `${Math.random() * 50 + 25}%`;
-                sparkle.style.fontSize = `${Math.random() * 12 + 14}px`;
-                fragment.appendChild(sparkle);
-            }
-            stageBg.appendChild(fragment);
-            setTimeout(() => {
-                const sparkles = stageBg.querySelectorAll('.sparkle');
-                sparkles.forEach(s => s.remove());
-            }, 850);
-        }
+    // ---------- 반응형 ----------
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        camera.aspect = stage.clientWidth / stage.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(stage.clientWidth, stage.clientHeight);
+      }, 100);
+    });
 
-        // iOS Safari에서 active 상태 유지 버그 방지
-        document.addEventListener('touchstart', function() {}, { passive: true });
+    // ---------- 애니메이션 ----------
+    function animate() {
+      requestAnimationFrame(animate);
+      const t = Date.now() * 0.001;
 
-        // 초기화
-        updateLayers();
-        renderItemSelector('dress');
-        updateSoundButton();
-    })();
-</script>
+      character.position.y = Math.sin(t * 2) * 0.025;
+      character.rotation.y = Math.sin(t * 0.5) * 0.05;
+
+      if (itemsGroup.wings.children.length > 0) {
+        itemsGroup.wings.rotation.z = Math.sin(t * 4) * 0.12;
+        itemsGroup.wings.rotation.x = Math.sin(t * 3) * 0.05;
+      }
+
+      applyPose();
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    renderTabs();
+    renderSelector(active);
+  </script>
 </body>
 </html>
