@@ -376,80 +376,84 @@
 </head>
 <body>
 
-    <div class="phone-frame">
-        <div class="header">
-            <div class="title">✨ 키라키라 프린세스 ✨</div>
-            <div class="header-btns">
-                <button class="icon-btn" id="bgToggleBtn" title="배경 변경" aria-label="배경 변경">🏰</button>
-                <button class="icon-btn" id="soundBtn" title="효과음" aria-label="효과음 켜기/끄기">🎵</button>
-            </div>
-        </div>
-
-        <div class="stage bg-room" id="stageBg">
-            <div class="character-container" id="characterStage">
-                <!-- 올바른 오버레이 레이어 순서 (뒤에서 앞으로) -->
-                <div class="layer" id="layer-wings"></div>
-                <div class="layer" id="layer-body"></div>
-                <div class="layer" id="layer-shoes"></div>
-                <div class="layer" id="layer-dress"></div>
-                <div class="layer" id="layer-hair"></div>
-                <div class="layer" id="layer-tiara"></div>
-                <div class="layer" id="layer-accessory"></div>
-            </div>
-        </div>
-
-        <div class="control-panel">
-            <div class="category-tabs" id="categoryTabs">
-                <button class="tab-btn active" data-category="dress">👗 드레스</button>
-                <button class="tab-btn" data-category="hair">💇‍♀️ 헤어</button>
-                <button class="tab-btn" data-category="shoes">👠 신발</button>
-                <button class="tab-btn" data-category="tiara">👑 티아라</button>
-                <button class="tab-btn" data-category="wings">🧚 날개</button>
-                <button class="tab-btn" data-category="accessory">✨ 액세서리</button>
-            </div>
-
-            <div class="item-selector" id="itemSelector"></div>
-
-            <div class="action-bar">
-                <button class="action-btn btn-random" id="randomBtn">🎲 랜덤코디</button>
-                <button class="action-btn btn-reset" id="resetBtn">🔄 초기화</button>
-                <button class="action-btn btn-save" id="saveBtn">📸 저장하기</button>
-            </div>
+<div class="phone-frame">
+    <div class="header">
+        <div class="title">✨ 키라키라 프린세스 ✨</div>
+        <div class="header-btns">
+            <button class="icon-btn" id="bgToggleBtn" title="배경 변경" aria-label="배경 변경">🏰</button>
+            <button class="icon-btn" id="soundBtn" title="효과음" aria-label="효과음 켜기/끄기">🎵</button>
         </div>
     </div>
 
-    <script>
-        (function() {
-            let soundEnabled = true;
-            let audioCtx = null;
+    <div class="stage bg-room" id="stageBg">
+        <div class="character-container" id="characterStage">
+            <!-- 올바른 오버레이 레이어 순서 (뒤에서 앞으로) -->
+            <div class="layer" id="layer-wings"></div>
+            <div class="layer" id="layer-body"></div>
+            <div class="layer" id="layer-shoes"></div>
+            <div class="layer" id="layer-dress"></div>
+            <div class="layer" id="layer-hair"></div>
+            <div class="layer" id="layer-tiara"></div>
+            <div class="layer" id="layer-accessory"></div>
+        </div>
+    </div>
 
-            function initAudio() {
-                if (!audioCtx) {
-                    try {
-                        audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-                    } catch (e) {
-                        console.warn('Web Audio API not supported');
-                        soundEnabled = false;
-                        updateSoundButton();
-                        return null;
-                    }
+    <div class="control-panel">
+        <div class="category-tabs" id="categoryTabs">
+            <button class="tab-btn active" data-category="dress">👗 드레스</button>
+            <button class="tab-btn" data-category="hair">💇‍♀️ 헤어</button>
+            <button class="tab-btn" data-category="shoes">👠 신발</button>
+            <button class="tab-btn" data-category="tiara">👑 티아라</button>
+            <button class="tab-btn" data-category="wings">🧚 날개</button>
+            <button class="tab-btn" data-category="accessory">✨ 액세서리</button>
+        </div>
+
+        <div class="item-selector" id="itemSelector"></div>
+
+        <div class="action-bar">
+            <button class="action-btn btn-random" id="randomBtn">🎲 랜덤코디</button>
+            <button class="action-btn btn-reset" id="resetBtn">🔄 초기화</button>
+            <button class="action-btn btn-save" id="saveBtn">📸 저장하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        let soundEnabled = true;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                try {
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                } catch (e) {
+                    console.warn('Web Audio API not supported');
+                    soundEnabled = false;
+                    updateSoundButton();
+                    return null;
                 }
-                if (audioCtx && audioCtx.state === 'suspended') {
-                    audioCtx.resume().catch(() => {});
-                }
-                return audioCtx;
             }
-
-            function updateSoundButton() {
-                const btn = document.getElementById('soundBtn');
-                if (btn) btn.textContent = soundEnabled ? '🎵' : '🔇';
+            if (audioCtx && audioCtx.state === 'suspended') {
+                // resume()은 Promise를 반환하지만 여기서는 상태만 확인하고 실제 재생은 playSound에서 처리
+                audioCtx.resume().catch(() => {});
             }
+            return audioCtx;
+        }
 
-            function playSound(type) {
-                if (!soundEnabled) return;
-                const ctx = initAudio();
-                if (!ctx) return;
+        function updateSoundButton() {
+            const btn = document.getElementById('soundBtn');
+            if (btn) btn.textContent = soundEnabled ? '🎵' : '🔇';
+        }
 
+        // 수정된 playSound 함수 - AudioContext resume 완료 후 소리 재생
+        function playSound(type) {
+            if (!soundEnabled) return;
+            const ctx = initAudio();
+            if (!ctx) return;
+
+            // 실제 소리 재생 로직을 함수로 분리
+            const run = () => {
                 try {
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
@@ -480,303 +484,311 @@
                 } catch (e) {
                     console.warn('Sound play error:', e);
                 }
-            }
+            };
 
-            // 캐릭터와 의상 SVG 데이터 정의
-            const db = {
-                body: [{
-                    id: 'default',
-                    name: '기본베이스',
+            // suspended 상태면 resume 완료 후 실행, 아니면 바로 실행
+            if (ctx.state === 'suspended') {
+                ctx.resume().then(run).catch(() => {});
+            } else {
+                run();
+            }
+        }
+
+        // 캐릭터와 의상 SVG 데이터 정의
+        const db = {
+            body: [{
+                id: 'default',
+                name: '기본베이스',
+                svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <rect x="92" y="90" width="16" height="25" fill="#ffe0bd" rx="5"/>
+                <path d="M80 110 Q100 120 120 110 L115 150 Q100 155 85 150 Z" fill="#ffe0bd"/>
+                <path d="M82 112 Q100 120 118 112 L115 135 Q100 140 85 135 Z" fill="#ffb6c1"/>
+                <rect x="86" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
+                <rect x="103" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
+                <path d="M80 112 Q65 140 70 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
+                <path d="M120 112 Q135 140 130 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
+                <ellipse cx="100" cy="70" rx="30" ry="34" fill="#ffe0bd"/>
+                <circle cx="69" cy="72" r="6" fill="#ffe0bd"/>
+                <circle cx="131" cy="72" r="6" fill="#ffe0bd"/>
+                <path d="M82 58 Q88 54 94 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <path d="M106 58 Q112 54 118 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
+                <ellipse cx="88" cy="68" rx="6" ry="8" fill="#4b2e83"/>
+                <circle cx="86" cy="65" r="2.5" fill="#fff"/>
+                <circle cx="89" cy="71" r="1.2" fill="#fff"/>
+                <ellipse cx="112" cy="68" rx="6" ry="8" fill="#4b2e83"/>
+                <circle cx="110" cy="65" r="2.5" fill="#fff"/>
+                <circle cx="113" cy="71" r="1.2" fill="#fff"/>
+                <ellipse cx="80" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
+                <ellipse cx="120" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
+                <circle cx="100" cy="74" r="1" fill="#e5989b"/>
+                <path d="M96 82 Q100 87 104 82" stroke="#d81b60" stroke-width="2" stroke-linecap="round" fill="none"/>
+            </svg>`
+            }],
+            dress: [
+                { id: 'none', name: '속옷차림', svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
+                {
+                    id: 'dress1',
+                    name: '핑크스타',
                     svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <rect x="92" y="90" width="16" height="25" fill="#ffe0bd" rx="5"/>
-                    <path d="M80 110 Q100 120 120 110 L115 150 Q100 155 85 150 Z" fill="#ffe0bd"/>
-                    <path d="M82 112 Q100 120 118 112 L115 135 Q100 140 85 135 Z" fill="#ffb6c1"/>
-                    <rect x="86" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
-                    <rect x="103" y="145" width="11" height="100" fill="#ffe0bd" rx="5"/>
-                    <path d="M80 112 Q65 140 70 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
-                    <path d="M120 112 Q135 140 130 170" stroke="#ffe0bd" stroke-width="10" stroke-linecap="round" fill="none"/>
-                    <ellipse cx="100" cy="70" rx="30" ry="34" fill="#ffe0bd"/>
-                    <circle cx="69" cy="72" r="6" fill="#ffe0bd"/>
-                    <circle cx="131" cy="72" r="6" fill="#ffe0bd"/>
-                    <path d="M82 58 Q88 54 94 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <path d="M106 58 Q112 54 118 58" stroke="#8b4513" stroke-width="2" fill="none" stroke-linecap="round"/>
-                    <ellipse cx="88" cy="68" rx="6" ry="8" fill="#4b2e83"/>
-                    <circle cx="86" cy="65" r="2.5" fill="#fff"/>
-                    <circle cx="89" cy="71" r="1.2" fill="#fff"/>
-                    <ellipse cx="112" cy="68" rx="6" ry="8" fill="#4b2e83"/>
-                    <circle cx="110" cy="65" r="2.5" fill="#fff"/>
-                    <circle cx="113" cy="71" r="1.2" fill="#fff"/>
-                    <ellipse cx="80" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
-                    <ellipse cx="120" cy="76" rx="5" ry="3" fill="#ff80ab" opacity="0.6"/>
-                    <circle cx="100" cy="74" r="1" fill="#e5989b"/>
-                    <path d="M96 82 Q100 87 104 82" stroke="#d81b60" stroke-width="2" stroke-linecap="round" fill="none"/>
-                </svg>`
-                }],
-                dress: [
-                    { id: 'none', name: '속옷차림', svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                    {
-                        id: 'dress1',
-                        name: '핑크스타',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <linearGradient id="pinkGrad1" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#ff69b4"/>
-                            <stop offset="100%" stop-color="#ff1493"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M78 110 Q100 115 122 110 L145 205 Q100 225 55 205 Z" fill="url(#pinkGrad1)"/>
-                    <path d="M78 110 Q100 125 122 110 L130 145 Q100 155 70 145 Z" fill="#fff" opacity="0.5"/>
-                    <circle cx="100" cy="130" r="7" fill="#ffd700"/>
-                </svg>`
-                    },
-                    {
-                        id: 'dress2',
-                        name: '라벤더문',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <linearGradient id="purpleGrad1" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#dda0dd"/>
-                            <stop offset="100%" stop-color="#8a2be2"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M78 110 Q100 115 122 110 L150 210 Q100 230 50 210 Z" fill="url(#purpleGrad1)"/>
-                    <polygon points="100,125 104,137 117,137 106,145 110,157 100,149 90,157 94,145 83,137 96,137" fill="#ffd700"/>
-                </svg>`
-                    },
-                    {
-                        id: 'dress3',
-                        name: '스카이엔젤',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <defs>
-                        <linearGradient id="skyGrad1" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stop-color="#b0e0e6"/>
-                            <stop offset="100%" stop-color="#1e90ff"/>
-                        </linearGradient>
-                    </defs>
-                    <path d="M78 110 Q100 115 122 110 L155 215 Q100 230 45 215 Z" fill="url(#skyGrad1)"/>
-                    <ellipse cx="100" cy="160" rx="35" ry="12" fill="#fff" opacity="0.6"/>
-                </svg>`
-                    }
-                ],
-                hair: [
-                    {
-                        id: 'hair1',
-                        name: '트윈웨이브',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <path d="M68 60 Q35 80 45 150 Q30 110 60 70 Z" fill="#ff69b4"/>
-                    <path d="M132 60 Q165 80 155 150 Q170 110 140 70 Z" fill="#ff69b4"/>
-                    <path d="M70 52 Q100 30 130 52 Q136 68 126 62 Q100 50 74 62 Q64 68 70 52 Z" fill="#ff1493"/>
-                </svg>`
-                    },
-                    {
-                        id: 'hair2',
-                        name: '롱실키',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <path d="M68 52 Q100 25 132 52 Q142 80 138 180 Q122 170 128 90 Q100 65 72 90 Q78 170 62 180 Q58 80 68 52 Z" fill="#9370db"/>
-                </svg>`
-                    },
-                    {
-                        id: 'hair3',
-                        name: '포니테일',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
-                    <path d="M125 55 Q175 60 160 140 Q145 120 135 85 Z" fill="#ffd700"/>
-                    <path d="M70 52 Q100 28 130 52 Q135 68 122 62 Q100 52 78 62 Q65 68 70 52 Z" fill="#ffcc00"/>
-                </svg>`
-                    }
-                ],
-                shoes: [
-                    { id: 'shoes1', name: '핑크구두',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><ellipse cx="91" cy="242" rx="8" ry="5" fill="#ff1493"/><ellipse cx="109" cy="242" rx="8" ry="5" fill="#ff1493"/></svg>` },
-                    { id: 'shoes2', name: '블루부츠',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M83 225 L83 245 L97 245 L97 225 Z" fill="#1e90ff"/><path d="M103 225 L103 245 L117 245 L117 225 Z" fill="#1e90ff"/></svg>` }
-                ],
-                tiara: [
-                    { id: 'none', name: '없음',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                    { id: 'tiara1', name: '하트티아라',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M82 42 L91 28 L100 38 L109 28 L118 42 Z" fill="#ffd700"/><circle cx="100" cy="33" r="3" fill="#ff1493"/></svg>` },
-                    { id: 'tiara2', name: '스타크라운',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><polygon points="100,22 103,30 112,30 105,35 107,43 100,38 93,43 95,35 88,30 97,30" fill="#ffd700"/></svg>` }
-                ],
-                wings: [
-                    { id: 'none', name: '없음',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                    { id: 'wings1', name: '페어리윙즈',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M68 110 Q28 80 38 120 Q58 140 73 130 Z" fill="#b0e0e6" opacity="0.8"/><path d="M132 110 Q172 80 162 120 Q142 140 127 130 Z" fill="#b0e0e6" opacity="0.8"/></svg>` }
-                ],
-                accessory: [
-                    { id: 'none', name: '없음',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
-                    { id: 'wand', name: '마법봉',
-                        svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><line x1="135" y1="160" x2="150" y2="130" stroke="#ffd700" stroke-width="3"/><polygon points="150,120 153,128 161,130 155,136 157,144 150,140 143,144 145,136 139,130 147,128" fill="#ff1493"/></svg>` }
-                ]
-            };
-
-            const currentOutfit = {
-                body: 'default',
-                dress: 'dress1',
-                hair: 'hair1',
-                shoes: 'shoes1',
-                tiara: 'tiara1',
-                wings: 'wings1',
-                accessory: 'wand'
-            };
-
-            const categoryTabs = document.getElementById('categoryTabs');
-            const itemSelector = document.getElementById('itemSelector');
-            const stageBg = document.getElementById('stageBg');
-            const soundBtn = document.getElementById('soundBtn');
-
-            let activeCategory = 'dress';
-
-            function updateLayers() {
-                Object.keys(currentOutfit).forEach(cat => {
-                    const layerEl = document.getElementById(`layer-${cat}`);
-                    if (layerEl) {
-                        const itemId = currentOutfit[cat];
-                        const itemObj = db[cat].find(i => i.id === itemId);
-                        layerEl.innerHTML = itemObj ? itemObj.svg : '';
-                    }
-                });
-            }
-
-            function renderItemSelector(category) {
-                if (!itemSelector || !db[category]) return;
-                itemSelector.innerHTML = '';
-                const items = db[category];
-                const currentId = currentOutfit[category];
-
-                items.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = `item-card${currentId === item.id ? ' selected' : ''}`;
-                    card.setAttribute('role', 'button');
-                    card.setAttribute('aria-label', item.name);
-                    card.setAttribute('tabindex', '0');
-                    card.innerHTML = `
-                    <div class="item-preview">${item.svg}</div>
-                    <div class="item-name">${item.name}</div>
-                `;
-                    card.addEventListener('click', () => {
-                        playSound('click');
-                        currentOutfit[category] = item.id;
-                        updateLayers();
-                        renderItemSelector(category);
-                        createSparkleEffect();
-                    });
-                    // 키보드 접근성
-                    card.addEventListener('keydown', (e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            card.click();
-                        }
-                    });
-                    itemSelector.appendChild(card);
-                });
-
-                // 선택된 아이템으로 스크롤
-                const selectedCard = itemSelector.querySelector('.item-card.selected');
-                if (selectedCard) {
-                    selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+                <defs>
+                    <linearGradient id="pinkGrad1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#ff69b4"/>
+                        <stop offset="100%" stop-color="#ff1493"/>
+                    </linearGradient>
+                </defs>
+                <path d="M78 110 Q100 115 122 110 L145 205 Q100 225 55 205 Z" fill="url(#pinkGrad1)"/>
+                <path d="M78 110 Q100 125 122 110 L130 145 Q100 155 70 145 Z" fill="#fff" opacity="0.5"/>
+                <circle cx="100" cy="130" r="7" fill="#ffd700"/>
+            </svg>`
+                },
+                {
+                    id: 'dress2',
+                    name: '라벤더문',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="purpleGrad1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#dda0dd"/>
+                        <stop offset="100%" stop-color="#8a2be2"/>
+                    </linearGradient>
+                </defs>
+                <path d="M78 110 Q100 115 122 110 L150 210 Q100 230 50 210 Z" fill="url(#purpleGrad1)"/>
+                <polygon points="100,125 104,137 117,137 106,145 110,157 100,149 90,157 94,145 83,137 96,137" fill="#ffd700"/>
+            </svg>`
+                },
+                {
+                    id: 'dress3',
+                    name: '스카이엔젤',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <linearGradient id="skyGrad1" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#b0e0e6"/>
+                        <stop offset="100%" stop-color="#1e90ff"/>
+                    </linearGradient>
+                </defs>
+                <path d="M78 110 Q100 115 122 110 L155 215 Q100 230 45 215 Z" fill="url(#skyGrad1)"/>
+                <ellipse cx="100" cy="160" rx="35" ry="12" fill="#fff" opacity="0.6"/>
+            </svg>`
                 }
-            }
-
-            // 카테고리 탭 이벤트
-            categoryTabs.addEventListener('click', (e) => {
-                const tabBtn = e.target.closest('.tab-btn');
-                if (!tabBtn) return;
-                playSound('click');
-                document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-                tabBtn.classList.add('active');
-                activeCategory = tabBtn.getAttribute('data-category');
-                renderItemSelector(activeCategory);
-            });
-
-            // 배경 변경
-            const bgList = ['bg-room', 'bg-castle', 'bg-garden', 'bg-stage'];
-            let bgIndex = 0;
-            document.getElementById('bgToggleBtn').addEventListener('click', () => {
-                playSound('click');
-                stageBg.classList.remove(bgList[bgIndex]);
-                bgIndex = (bgIndex + 1) % bgList.length;
-                stageBg.classList.add(bgList[bgIndex]);
-            });
-
-            // 효과음 토글
-            soundBtn.addEventListener('click', () => {
-                soundEnabled = !soundEnabled;
-                updateSoundButton();
-                if (soundEnabled) playSound('click');
-            });
-
-            // 랜덤 코디
-            document.getElementById('randomBtn').addEventListener('click', () => {
-                playSound('magic');
-                Object.keys(db).forEach(cat => {
-                    if (cat === 'body') return;
-                    const items = db[cat];
-                    const randIndex = Math.floor(Math.random() * items.length);
-                    currentOutfit[cat] = items[randIndex].id;
-                });
-                updateLayers();
-                renderItemSelector(activeCategory);
-                createSparkleEffect();
-            });
-
-            // 초기화
-            document.getElementById('resetBtn').addEventListener('click', () => {
-                playSound('click');
-                currentOutfit.dress = 'none';
-                currentOutfit.shoes = 'shoes1';
-                currentOutfit.tiara = 'none';
-                currentOutfit.wings = 'none';
-                currentOutfit.accessory = 'none';
-                currentOutfit.hair = 'hair1';
-                updateLayers();
-                renderItemSelector(activeCategory);
-            });
-
-            // 저장
-            document.getElementById('saveBtn').addEventListener('click', () => {
-                playSound('magic');
-                // iOS에서는 알림 대신 시각적 피드백 제공
-                const saveBtn = document.getElementById('saveBtn');
-                const originalText = saveBtn.textContent;
-                saveBtn.textContent = '✅ 저장 완료!';
-                saveBtn.style.background = 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)';
-                setTimeout(() => {
-                    saveBtn.textContent = originalText;
-                    saveBtn.style.background = '';
-                }, 1500);
-                createSparkleEffect();
-            });
-
-            function createSparkleEffect() {
-                const count = 4;
-                const fragment = document.createDocumentFragment();
-                for (let i = 0; i < count; i++) {
-                    const sparkle = document.createElement('div');
-                    sparkle.className = 'sparkle';
-                    sparkle.textContent = '✨';
-                    sparkle.style.left = `${Math.random() * 70 + 15}%`;
-                    sparkle.style.top = `${Math.random() * 50 + 25}%`;
-                    sparkle.style.fontSize = `${Math.random() * 12 + 14}px`;
-                    fragment.appendChild(sparkle);
+            ],
+            hair: [
+                {
+                    id: 'hair1',
+                    name: '트윈웨이브',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <path d="M68 60 Q35 80 45 150 Q30 110 60 70 Z" fill="#ff69b4"/>
+                <path d="M132 60 Q165 80 155 150 Q170 110 140 70 Z" fill="#ff69b4"/>
+                <path d="M70 52 Q100 30 130 52 Q136 68 126 62 Q100 50 74 62 Q64 68 70 52 Z" fill="#ff1493"/>
+            </svg>`
+                },
+                {
+                    id: 'hair2',
+                    name: '롱실키',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <path d="M68 52 Q100 25 132 52 Q142 80 138 180 Q122 170 128 90 Q100 65 72 90 Q78 170 62 180 Q58 80 68 52 Z" fill="#9370db"/>
+            </svg>`
+                },
+                {
+                    id: 'hair3',
+                    name: '포니테일',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet">
+                <path d="M125 55 Q175 60 160 140 Q145 120 135 85 Z" fill="#ffd700"/>
+                <path d="M70 52 Q100 28 130 52 Q135 68 122 62 Q100 52 78 62 Q65 68 70 52 Z" fill="#ffcc00"/>
+            </svg>`
                 }
-                stageBg.appendChild(fragment);
-                setTimeout(() => {
-                    const sparkles = stageBg.querySelectorAll('.sparkle');
-                    sparkles.forEach(s => s.remove());
-                }, 850);
+            ],
+            shoes: [
+                { id: 'shoes1', name: '핑크구두',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><ellipse cx="91" cy="242" rx="8" ry="5" fill="#ff1493"/><ellipse cx="109" cy="242" rx="8" ry="5" fill="#ff1493"/></svg>` },
+                { id: 'shoes2', name: '블루부츠',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M83 225 L83 245 L97 245 L97 225 Z" fill="#1e90ff"/><path d="M103 225 L103 245 L117 245 L117 225 Z" fill="#1e90ff"/></svg>` }
+            ],
+            tiara: [
+                { id: 'none', name: '없음',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
+                { id: 'tiara1', name: '하트티아라',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M82 42 L91 28 L100 38 L109 28 L118 42 Z" fill="#ffd700"/><circle cx="100" cy="33" r="3" fill="#ff1493"/></svg>` },
+                { id: 'tiara2', name: '스타크라운',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><polygon points="100,22 103,30 112,30 105,35 107,43 100,38 93,43 95,35 88,30 97,30" fill="#ffd700"/></svg>` }
+            ],
+            wings: [
+                { id: 'none', name: '없음',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
+                { id: 'wings1', name: '페어리윙즈',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><path d="M68 110 Q28 80 38 120 Q58 140 73 130 Z" fill="#b0e0e6" opacity="0.8"/><path d="M132 110 Q172 80 162 120 Q142 140 127 130 Z" fill="#b0e0e6" opacity="0.8"/></svg>` }
+            ],
+            accessory: [
+                { id: 'none', name: '없음',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"></svg>` },
+                { id: 'wand', name: '마법봉',
+                    svg: `<svg viewBox="0 0 200 300" preserveAspectRatio="xMidYMid meet"><line x1="135" y1="160" x2="150" y2="130" stroke="#ffd700" stroke-width="3"/><polygon points="150,120 153,128 161,130 155,136 157,144 150,140 143,144 145,136 139,130 147,128" fill="#ff1493"/></svg>` }
+            ]
+        };
+
+        const currentOutfit = {
+            body: 'default',
+            dress: 'dress1',
+            hair: 'hair1',
+            shoes: 'shoes1',
+            tiara: 'tiara1',
+            wings: 'wings1',
+            accessory: 'wand'
+        };
+
+        const categoryTabs = document.getElementById('categoryTabs');
+        const itemSelector = document.getElementById('itemSelector');
+        const stageBg = document.getElementById('stageBg');
+        const soundBtn = document.getElementById('soundBtn');
+
+        let activeCategory = 'dress';
+
+        function updateLayers() {
+            Object.keys(currentOutfit).forEach(cat => {
+                const layerEl = document.getElementById(`layer-${cat}`);
+                if (layerEl) {
+                    const itemId = currentOutfit[cat];
+                    const itemObj = db[cat].find(i => i.id === itemId);
+                    layerEl.innerHTML = itemObj ? itemObj.svg : '';
+                }
+            });
+        }
+
+        function renderItemSelector(category) {
+            if (!itemSelector || !db[category]) return;
+            itemSelector.innerHTML = '';
+            const items = db[category];
+            const currentId = currentOutfit[category];
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `item-card${currentId === item.id ? ' selected' : ''}`;
+                card.setAttribute('role', 'button');
+                card.setAttribute('aria-label', item.name);
+                card.setAttribute('tabindex', '0');
+                card.innerHTML = `
+                <div class="item-preview">${item.svg}</div>
+                <div class="item-name">${item.name}</div>
+            `;
+                card.addEventListener('click', () => {
+                    playSound('click');
+                    currentOutfit[category] = item.id;
+                    updateLayers();
+                    renderItemSelector(category);
+                    createSparkleEffect();
+                });
+                // 키보드 접근성
+                card.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        card.click();
+                    }
+                });
+                itemSelector.appendChild(card);
+            });
+
+            // 선택된 아이템으로 스크롤
+            const selectedCard = itemSelector.querySelector('.item-card.selected');
+            if (selectedCard) {
+                selectedCard.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
             }
+        }
 
-            // iOS Safari에서 active 상태 유지 버그 방지
-            document.addEventListener('touchstart', function() {}, { passive: true });
+        // 카테고리 탭 이벤트
+        categoryTabs.addEventListener('click', (e) => {
+            const tabBtn = e.target.closest('.tab-btn');
+            if (!tabBtn) return;
+            playSound('click');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            tabBtn.classList.add('active');
+            activeCategory = tabBtn.getAttribute('data-category');
+            renderItemSelector(activeCategory);
+        });
 
-            // 초기화
-            updateLayers();
-            renderItemSelector('dress');
+        // 배경 변경
+        const bgList = ['bg-room', 'bg-castle', 'bg-garden', 'bg-stage'];
+        let bgIndex = 0;
+        document.getElementById('bgToggleBtn').addEventListener('click', () => {
+            playSound('click');
+            stageBg.classList.remove(bgList[bgIndex]);
+            bgIndex = (bgIndex + 1) % bgList.length;
+            stageBg.classList.add(bgList[bgIndex]);
+        });
+
+        // 효과음 토글
+        soundBtn.addEventListener('click', () => {
+            soundEnabled = !soundEnabled;
             updateSoundButton();
-        })();
-    </script>
+            if (soundEnabled) playSound('click');
+        });
+
+        // 랜덤 코디
+        document.getElementById('randomBtn').addEventListener('click', () => {
+            playSound('magic');
+            Object.keys(db).forEach(cat => {
+                if (cat === 'body') return;
+                const items = db[cat];
+                const randIndex = Math.floor(Math.random() * items.length);
+                currentOutfit[cat] = items[randIndex].id;
+            });
+            updateLayers();
+            renderItemSelector(activeCategory);
+            createSparkleEffect();
+        });
+
+        // 초기화
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            playSound('click');
+            currentOutfit.dress = 'none';
+            currentOutfit.shoes = 'shoes1';
+            currentOutfit.tiara = 'none';
+            currentOutfit.wings = 'none';
+            currentOutfit.accessory = 'none';
+            currentOutfit.hair = 'hair1';
+            updateLayers();
+            renderItemSelector(activeCategory);
+        });
+
+        // 저장
+        document.getElementById('saveBtn').addEventListener('click', () => {
+            playSound('magic');
+            // iOS에서는 알림 대신 시각적 피드백 제공
+            const saveBtn = document.getElementById('saveBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.textContent = '✅ 저장 완료!';
+            saveBtn.style.background = 'linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%)';
+            setTimeout(() => {
+                saveBtn.textContent = originalText;
+                saveBtn.style.background = '';
+            }, 1500);
+            createSparkleEffect();
+        });
+
+        function createSparkleEffect() {
+            const count = 4;
+            const fragment = document.createDocumentFragment();
+            for (let i = 0; i < count; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.textContent = '✨';
+                sparkle.style.left = `${Math.random() * 70 + 15}%`;
+                sparkle.style.top = `${Math.random() * 50 + 25}%`;
+                sparkle.style.fontSize = `${Math.random() * 12 + 14}px`;
+                fragment.appendChild(sparkle);
+            }
+            stageBg.appendChild(fragment);
+            setTimeout(() => {
+                const sparkles = stageBg.querySelectorAll('.sparkle');
+                sparkles.forEach(s => s.remove());
+            }, 850);
+        }
+
+        // iOS Safari에서 active 상태 유지 버그 방지
+        document.addEventListener('touchstart', function() {}, { passive: true });
+
+        // 초기화
+        updateLayers();
+        renderItemSelector('dress');
+        updateSoundButton();
+    })();
+</script>
 </body>
 </html>
